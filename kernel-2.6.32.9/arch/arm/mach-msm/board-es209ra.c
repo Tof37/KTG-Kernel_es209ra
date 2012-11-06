@@ -109,7 +109,7 @@
 #define SMEM_SPINLOCK_I2C	"S:6"
 
 #define MSM_PMEM_ADSP_SIZE	0x03000000 //0x02196000
-#define MSM_PMEM_MDP_SIZE	0x01C91000
+
 #define PMEM_KERNEL_EBI1_SIZE	0x00028000
 
 #define MSM_AUDIO_SIZE		0x80000
@@ -122,6 +122,10 @@
 
 #define MSM_FB_BASE		0x02B00000
 #define MSM_FB_SIZE		0x00500000
+
+#define MSM_GPU_PHYS_BASE 	0x03000000
+#define MSM_GPU_PHYS_SIZE 	0x00200000
+
 
 #define MSM_RAM_CONSOLE_START   0x38000000 - MSM_RAM_CONSOLE_SIZE
 #define MSM_RAM_CONSOLE_SIZE    128 * SZ_1K
@@ -327,10 +331,6 @@ static struct usb_mass_storage_platform_data mass_storage_pdata = {
 	.product = "Mass Storage",
 	.release = 0x0100,
 
-	.cdrom_nluns = 1,
-	.cdrom_vendor = "SEMC",
-	.cdrom_product = "CD-ROM",
-	.cdrom_release = 0x0100,
 };
 
 static struct platform_device usb_mass_storage_device = {
@@ -1066,13 +1066,13 @@ static struct kgsl_cpufreq_voter kgsl_cpufreq_voter = {
 	},
 };
 
-static void kgsl_idle_cb(int idle)
-{
-	if (idle != kgsl_cpufreq_voter.idle) {
-		kgsl_cpufreq_voter.idle = idle;
-		msm_cpufreq_voter_update(&kgsl_cpufreq_voter.voter);
-	}
-}
+
+
+
+
+
+
+
 
 static struct resource kgsl_3d0_resources[] = {
        {
@@ -1407,19 +1407,6 @@ static uint32_t camera_on_gpio_table[] = {
 	GPIO_CFG(142, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA), /* VCAMSD_EN */
 };
 
-static uint32_t camera_on_gpio_ffa_table[] = {
-	// parallel CAMERA interfaces 
-	GPIO_CFG(95,  1, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_16MA), // I2C_SCL 
-	GPIO_CFG(96,  1, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_16MA), // I2C_SDA 
-	// FFA front Sensor Reset 
-	GPIO_CFG(137,  1, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_16MA),
-};
-
-static uint32_t camera_off_gpio_ffa_table[] = {
-	// FFA front Sensor Reset 
-	GPIO_CFG(137,  0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_16MA),
-};
-	
 static void config_gpio_table(uint32_t *table, int len)
 {
 	int n, rc;
@@ -1434,8 +1421,9 @@ static void config_gpio_table(uint32_t *table, int len)
 }
 
 static struct vreg *vreg_gp2;
-static struct vreg *vreg_gp3;
+//static struct vreg *vreg_gp3;
 
+#if 0
 static void msm_camera_vreg_config(int vreg_en)
 {
 	int rc;
@@ -1496,6 +1484,7 @@ static void msm_camera_vreg_config(int vreg_en)
 		}
 	}
 }
+#endif//0
 
 static void config_camera_on_gpios(void)
 {
@@ -2341,8 +2330,8 @@ static void __init es209ra_allocate_memory_regions(void)
 	size = gpu_phys_size;
 	if (size) {
 		addr = alloc_bootmem(size);
-		kgsl_resources[1].start = __pa(addr);
-		kgsl_resources[1].end = kgsl_resources[1].start + size - 1;
+		kgsl_3d0_resources[1].start = __pa(addr);
+		kgsl_3d0_resources[1].end = kgsl_3d0_resources[1].start + size - 1;
 		pr_info("allocating %lu bytes at %p (%lx physical) for "
 			"KGSL\n", size, addr, __pa(addr));
 	}

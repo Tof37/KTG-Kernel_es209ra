@@ -1,32 +1,3 @@
-/* Copyright (c) 2009-2010, Code Aurora Forum. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above
- *       copyright notice, this list of conditions and the following
- *       disclaimer in the documentation and/or other materials provided
- *       with the distribution.
- *     * Neither the name of Code Aurora Forum, Inc. nor the names of its
- *       contributors may be used to endorse or promote products derived
- *       from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
- * ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
- * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
- * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- */
-
 #ifndef _KGSL_DRM_H_
 #define _KGSL_DRM_H_
 
@@ -44,6 +15,11 @@
 #define DRM_KGSL_GEM_GET_BUFINFO 0x08
 #define DRM_KGSL_GEM_SET_BUFCOUNT 0x09
 #define DRM_KGSL_GEM_SET_ACTIVE 0x0A
+#define DRM_KGSL_GEM_LOCK_HANDLE 0x0B
+#define DRM_KGSL_GEM_UNLOCK_HANDLE 0x0C
+#define DRM_KGSL_GEM_UNLOCK_ON_TS 0x0D
+#define DRM_KGSL_GEM_CREATE_FD 0x0E
+
 
 #define DRM_IOCTL_KGSL_GEM_CREATE \
 DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_CREATE, struct drm_kgsl_gem_create)
@@ -84,6 +60,22 @@ DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_SET_BUFCOUNT, \
 DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_SET_ACTIVE, \
 	 struct drm_kgsl_gem_active)
 
+#define DRM_IOCTL_KGSL_GEM_LOCK_HANDLE \
+DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_LOCK_HANDLE, \
+struct drm_kgsl_gem_lock_handles)
+
+#define DRM_IOCTL_KGSL_GEM_UNLOCK_HANDLE \
+DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_UNLOCK_HANDLE, \
+struct drm_kgsl_gem_unlock_handles)
+
+#define DRM_IOCTL_KGSL_GEM_UNLOCK_ON_TS \
+DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_UNLOCK_ON_TS, \
+struct drm_kgsl_gem_unlock_on_ts)
+
+#define DRM_IOCTL_KGSL_GEM_CREATE_FD \
+DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_CREATE_FD, \
+struct drm_kgsl_gem_create_fd)
+
 /* Maximum number of sub buffers per GEM object */
 #define DRM_KGSL_GEM_MAX_BUFFERS 2
 
@@ -116,6 +108,13 @@ DRM_IOWR(DRM_COMMAND_BASE + DRM_KGSL_GEM_SET_ACTIVE, \
 #define DRM_KGSL_GEM_CACHE_WBACKWA   0x800000
 #define DRM_KGSL_GEM_CACHE_MASK      0xF00000
 
+/* FD based objects */
+#define DRM_KGSL_GEM_TYPE_FD_FBMEM   0x1000000
+#define DRM_KGSL_GEM_TYPE_FD_MASK    0xF000000
+
+/* Timestamp types */
+#define DRM_KGSL_GEM_TS_3D         0x00000430
+#define DRM_KGSL_GEM_TS_2D         0x00000180
 struct drm_kgsl_gem_create {
 	uint32_t size;
 	uint32_t handle;
@@ -166,5 +165,28 @@ struct drm_kgsl_gem_active {
 	uint32_t handle;
 	uint32_t active;
 };
+
+struct drm_kgsl_gem_lock_handles {
+	uint32_t num_handles;
+	uint32_t *handle_list;
+	uint32_t pid;
+	uint32_t lock_id;	  /* Returned lock id used for unlocking */
+};
+
+struct drm_kgsl_gem_unlock_handles {
+	uint32_t lock_id;
+};
+
+struct drm_kgsl_gem_unlock_on_ts {
+	uint32_t lock_id;
+	uint32_t timestamp;	 /* This field is a hw generated ts */
+	uint32_t type;		 /* Which pipe to check for ts generation */
+};
+
+struct drm_kgsl_gem_create_fd {
+	uint32_t fd;
+	uint32_t handle;
+};
+
 
 #endif

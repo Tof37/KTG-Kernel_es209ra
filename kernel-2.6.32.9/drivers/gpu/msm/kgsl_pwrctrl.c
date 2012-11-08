@@ -632,6 +632,7 @@ int kgsl_pwrctrl_init(struct kgsl_device *device)
 	pm_qos_add_requirement(PM_QOS_SYSTEM_BUS_FREQ, "kgsl_3d",
 				PM_QOS_DEFAULT_VALUE);
 
+    printk("%s IRQNAME %s\n", __func__, pwr->irq_name);
 	/*acquire interrupt */
 	pwr->interrupt_num =
 		platform_get_irq_byname(pdev, pwr->irq_name);

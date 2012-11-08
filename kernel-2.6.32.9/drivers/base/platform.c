@@ -95,7 +95,7 @@ int platform_get_irq_byname(struct platform_device *dev, const char *name)
 {
 	struct resource *r = platform_get_resource_byname(dev, IORESOURCE_IRQ,
 							  name);
-
+    printk("%s %s found? %s", __func__, name, r?"No":"Yes");
 	return r ? r->start : -ENXIO;
 }
 EXPORT_SYMBOL_GPL(platform_get_irq_byname);
@@ -111,6 +111,7 @@ int platform_add_devices(struct platform_device **devs, int num)
 
 	for (i = 0; i < num; i++) {
 		ret = platform_device_register(devs[i]);
+        printk("Registering devices %s", devs[i]->name);
 		if (ret) {
 			while (--i >= 0)
 				platform_device_unregister(devs[i]);

@@ -191,9 +191,9 @@ int __init early_irq_init(void)
 
 struct irq_desc *irq_to_desc(unsigned int irq)
 {
+
 	if (irq_desc_ptrs && irq < nr_irqs)
 		return irq_desc_ptrs[irq];
-
 	return NULL;
 }
 
@@ -201,6 +201,8 @@ struct irq_desc * __ref irq_to_desc_alloc_node(unsigned int irq, int node)
 {
 	struct irq_desc *desc;
 	unsigned long flags;
+
+    printk("%s allocating node %d for irq %d", __func__,  node, irq);
 
 	if (irq >= nr_irqs) {
 		WARN(1, "irq (%d) >= nr_irqs (%d) in irq_to_desc_alloc\n",
@@ -224,7 +226,7 @@ struct irq_desc * __ref irq_to_desc_alloc_node(unsigned int irq, int node)
 	else
 		desc = alloc_bootmem_node(NODE_DATA(node), sizeof(*desc));
 
-	printk(KERN_DEBUG "  alloc irq_desc for %d on node %d\n", irq, node);
+	printk("%s  alloc irq_desc for %d on node %d\n", __func__, irq, node);
 	if (!desc) {
 		printk(KERN_ERR "can not alloc irq_desc\n");
 		BUG_ON(1);
@@ -276,6 +278,7 @@ int __init early_irq_init(void)
 
 struct irq_desc *irq_to_desc(unsigned int irq)
 {
+
 	return (irq < NR_IRQS) ? irq_desc + irq : NULL;
 }
 

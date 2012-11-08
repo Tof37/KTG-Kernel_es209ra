@@ -445,6 +445,7 @@ static struct resource resources_sdc1[] = {
 		.start	= INT_SDC1_0,
 		.end	= INT_SDC1_1,
 		.flags	= IORESOURCE_IRQ,
+		.name	= "irq",
 	},
 	{
 		.start	= 8,

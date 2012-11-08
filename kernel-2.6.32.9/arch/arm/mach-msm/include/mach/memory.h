@@ -20,7 +20,7 @@
 #define PHYS_OFFSET UL(CONFIG_PHYS_OFFSET)
 
 #define MAX_PHYSMEM_BITS 32
-#define SECTION_SIZE_BITS 28
+#define SECTION_SIZE_BITS 25
 
 /* Certain configurations of MSM7x30 have multiple memory banks.
 *  One or more of these banks can contain holes in the memory map as well.

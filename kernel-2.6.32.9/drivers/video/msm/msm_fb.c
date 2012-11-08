@@ -538,6 +538,7 @@ static int msm_fb_resume(struct platform_device *pdev)
 #define msm_fb_resume NULL
 #endif
 
+#if 0
 static int msm_fb_runtime_suspend(struct device *dev)
 {
 	dev_dbg(dev, "pm_runtime: suspending...\n");
@@ -561,6 +562,7 @@ static struct dev_pm_ops msm_fb_dev_pm_ops = {
 	.runtime_resume = msm_fb_runtime_resume,
 	.runtime_idle = msm_fb_runtime_idle,
 };
+#endif//0
 
 static struct platform_driver msm_fb_driver = {
 	.probe = msm_fb_probe,
@@ -573,7 +575,7 @@ static struct platform_driver msm_fb_driver = {
 	.driver = {
 		   /* Driver name must match the device name added in platform.c. */
 		   .name = "msm_fb",
-		   .pm = &msm_fb_dev_pm_ops,
+		   //.pm = &msm_fb_dev_pm_ops,
 		   },
 };
 

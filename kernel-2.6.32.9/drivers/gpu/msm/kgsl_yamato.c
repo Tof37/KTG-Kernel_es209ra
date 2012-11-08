@@ -87,6 +87,7 @@ static struct kgsl_yamato_device yamato_device = {
 		.id = KGSL_DEVICE_YAMATO,
 		.ver_major = DRIVER_VERSION_MAJOR,
 		.ver_minor = DRIVER_VERSION_MINOR,
+        
 		.mmu = {
 			.config = YAMATO_MMU_CONFIG,
 			/* turn off memory protection unit by setting
@@ -505,11 +506,14 @@ kgsl_3d_probe(struct platform_device *pdev)
 
 	kgsl_yamato_getfunctable(&device->ftbl);
 
+    printk("%s before kgsl_ringbuffer_init", __func__);
 	status = kgsl_ringbuffer_init(device);
+    printk("%s after kgsl_ringbuffer_init %d", __func__, status);
 	if (status != 0)
 		goto error;
 
 	status = kgsl_device_probe(device, kgsl_yamato_isr);
+    printk("%s after kgsl_device_probe %d", __func__, status);
 	if (status)
 		goto error_close_rb;
 

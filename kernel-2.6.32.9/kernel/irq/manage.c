@@ -1038,14 +1038,24 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
 
 	desc = irq_to_desc(irq);
 	if (!desc)
+    {
+        printk("%s no desc for irq %d\n", __func__, irq);
 		return -EINVAL;
+    }
 
 	if (desc->status & IRQ_NOREQUEST)
+    {
+        
+        printk("%s IRQ_NOREQUEST\n", __func__);
 		return -EINVAL;
+    }
 
 	if (!handler) {
 		if (!thread_fn)
+        {
+            printk("%s No handler\n", __func__);
 			return -EINVAL;
+        }
 		handler = irq_default_primary_handler;
 	}
 
@@ -1064,7 +1074,10 @@ int request_threaded_irq(unsigned int irq, irq_handler_t handler,
 	chip_bus_sync_unlock(irq, desc);
 
 	if (retval)
+    {
+        printk("%s setup_irq failed \n", __func__); 
 		kfree(action);
+    }
 
 #ifdef CONFIG_DEBUG_SHIRQ
 	if (irqflags & IRQF_SHARED) {

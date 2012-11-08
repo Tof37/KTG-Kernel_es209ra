@@ -1923,6 +1923,7 @@ int kgsl_device_probe(struct kgsl_device *device,
 	pm_runtime_enable(&pdev->dev);
 
 	status = kgsl_pwrctrl_init(device);
+    printk("%s after kgsl_pwrctrl_init %d\n", __func__, status);
 	if (status)
 		goto error;
 
@@ -1931,13 +1932,17 @@ int kgsl_device_probe(struct kgsl_device *device,
 
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
 					   device->iomemname);
+
+    printk("%s after platform_get_resource_byname\n", __func__);
 	if (res == NULL) {
 		KGSL_DRV_ERR(device, "platform_get_resource_byname failed\n");
+        printk("%s platform_get_resource_byname failed\n", __func__);
 		status = -EINVAL;
 		goto error_pwrctrl_close;
 	}
 	if (res->start == 0 || resource_size(res) == 0) {
 		KGSL_DRV_ERR(device, "dev %d invalid regspace\n", device->id);
+        printk("%s invalid regspace\n", __func__);
 		status = -EINVAL;
 		goto error_pwrctrl_close;
 	}
@@ -1965,6 +1970,7 @@ int kgsl_device_probe(struct kgsl_device *device,
 	status = request_irq(device->pwrctrl.interrupt_num, dev_isr,
 			     IRQF_TRIGGER_HIGH, device->name, device);
 	if (status) {
+        printk("%s request_irq failed %d\n", __func__, status);
 		KGSL_DRV_ERR(device, "request_irq(%d) failed: %d\n",
 			      device->pwrctrl.interrupt_num, status);
 		goto error_iounmap;
@@ -1986,6 +1992,7 @@ int kgsl_device_probe(struct kgsl_device *device,
 
 	setup_timer(&device->idle_timer, kgsl_timer, (unsigned long) device);
 	status = kgsl_create_device_workqueue(device);
+    printk("%s kgsl_create_device_workqueue status%d\n", __func__, status);
 	if (status)
 		goto error_free_irq;
 
@@ -1994,17 +2001,23 @@ int kgsl_device_probe(struct kgsl_device *device,
 	INIT_LIST_HEAD(&device->memqueue);
 
 	status = kgsl_mmu_init(device);
+
+    printk("%s kgsl_mmu_init status%d\n", __func__, status);
 	if (status != 0)
 		goto error_dest_work_q;
 
 	status = kgsl_sharedmem_alloc_coherent(&device->memstore,
 					sizeof(struct kgsl_devmemstore));
+    
+    printk("%s kgsl_sharedmem_alloc_coherent status%d\n", __func__, status);
 	if (status != 0)
 		goto error_close_mmu;
 
 	kgsl_sharedmem_set(&device->memstore, 0, 0, device->memstore.size);
 
 	status = kgsl_register_device(device);
+
+    printk("%s kgsl_register_device status%d\n", __func__, status);
 	if (status)
 		goto error_close_mmu;
 

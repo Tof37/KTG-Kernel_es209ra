@@ -17,7 +17,6 @@
 0x00000000	cfg80211_wext_giwscan	vmlinux	EXPORT_SYMBOL_GPL
 0x00000000	nf_log_register	vmlinux	EXPORT_SYMBOL
 0x00000000	scsi_execute	vmlinux	EXPORT_SYMBOL
-0x00000000	load_565rle_image	vmlinux	EXPORT_SYMBOL
 0x00000000	proc_net_remove	vmlinux	EXPORT_SYMBOL_GPL
 0x00000000	raw_seq_open	vmlinux	EXPORT_SYMBOL_GPL
 0x00000000	device_add	vmlinux	EXPORT_SYMBOL_GPL

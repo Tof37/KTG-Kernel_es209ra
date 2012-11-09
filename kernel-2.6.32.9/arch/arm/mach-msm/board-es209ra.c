@@ -1085,8 +1085,8 @@ static struct resource kgsl_3d0_resources[] = {
        },
        {
 		.name = KGSL_3D0_IRQ,
-		.start = INT_GRAPHICS,
-		.end = INT_GRAPHICS,
+		.start = 20,
+		.end = 20,
 		.flags = IORESOURCE_IRQ,
        },
 };
@@ -2328,6 +2328,7 @@ static void __init es209ra_allocate_memory_regions(void)
 	pr_info("using %lu bytes of SMI at %lx physical for fb\n",
 	       size, (unsigned long)addr);
 
+#if 0
 	size = gpu_phys_size;
 	if (size) {
 		addr = alloc_bootmem(size);
@@ -2336,6 +2337,7 @@ static void __init es209ra_allocate_memory_regions(void)
 		pr_info("allocating %lu bytes at %p (%lx physical) for "
 			"KGSL\n", size, addr, __pa(addr));
 	}
+#endif//0
 
 	size = pmem_swiqi_size;
 

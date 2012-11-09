@@ -78,7 +78,7 @@ struct resource *platform_get_resource_byname(struct platform_device *dev,
 
 	for (i = 0; i < dev->num_resources; i++) {
 		struct resource *r = &dev->resource[i];
-
+        printk("%s found %s looking for %s type is %ld looking for %d\n", __func__, r->name, name, resource_type(r), type);
 		if (type == resource_type(r) && !strcmp(r->name, name))
 			return r;
 	}
@@ -95,7 +95,7 @@ int platform_get_irq_byname(struct platform_device *dev, const char *name)
 {
 	struct resource *r = platform_get_resource_byname(dev, IORESOURCE_IRQ,
 							  name);
-    printk("%s %s found? %s", __func__, name, r?"No":"Yes");
+    printk("%s %s found? %s", __func__, name, r?"Yes":"No");
 	return r ? r->start : -ENXIO;
 }
 EXPORT_SYMBOL_GPL(platform_get_irq_byname);
@@ -249,11 +249,17 @@ int platform_device_add(struct platform_device *pdev)
 	else
 		dev_set_name(&pdev->dev, "%s", pdev->name);
 
+    printk("%s ADDING DEVICE %s\n", __func__, pdev->name);
+
 	for (i = 0; i < pdev->num_resources; i++) {
 		struct resource *p, *r = &pdev->resource[i];
 
+
+        
 		if (r->name == NULL)
 			r->name = dev_name(&pdev->dev);
+
+        printk("%s adding resource %s %d\n", __func__, r->name, r->start);
 
 		p = r->parent;
 		if (!p) {
@@ -280,6 +286,7 @@ int platform_device_add(struct platform_device *pdev)
 		return ret;
 
  failed:
+    printk("FAILED TO ADDDEVICE %s\n", pdev->name);
 	while (--i >= 0) {
 		struct resource *r = &pdev->resource[i];
 		unsigned long type = resource_type(r);

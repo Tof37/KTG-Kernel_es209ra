@@ -7,15 +7,15 @@
 #define MAX17040_MODEL_BLK_SIZE 16
 
 struct max17040_model_desc {
-	u8 ocv_test[MAX17040_REG_SIZE];
-	u8 soc_low;
-	u8 soc_high;
-	u8 model_data[MAX17040_MODEL_NBR_BLKS][MAX17040_MODEL_BLK_SIZE];
+	uint8_t ocv_test[MAX17040_REG_SIZE];
+	uint8_t soc_low;
+	uint8_t soc_high;
+	uint8_t model_data[MAX17040_MODEL_NBR_BLKS][MAX17040_MODEL_BLK_SIZE];
 	int exp;
 };
 
 struct max17040_rcomp_data {
-	u8 rcomp0;
+	uint8_t rcomp0;
 	int temp_co_hot;
 	int temp_co_cold;
 	int temp_div;

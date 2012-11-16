@@ -1343,7 +1343,7 @@ static void __exit kgsl_3d_exit(void)
 	platform_driver_unregister(&kgsl_3d_platform_driver);
 }
 
-module_init(kgsl_3d_init);
+late_initcall(kgsl_3d_init);
 module_exit(kgsl_3d_exit);
 
 MODULE_DESCRIPTION("3D Graphics driver");

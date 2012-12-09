@@ -1,7 +1,7 @@
 /*
  * Automatically generated C config: don't edit
  * Linux kernel version: 2.6.32.9
- * Thu Nov  8 22:03:10 2012
+ * Sun Dec  9 21:13:07 2012
  */
 #define AUTOCONF_INCLUDED
 #define CONFIG_VIDEO_V4L1_COMPAT 1
@@ -538,6 +538,7 @@
 #define CONFIG_MODULE_FORCE_UNLOAD 1
 #define CONFIG_RTC_INTF_DEV 1
 #define CONFIG_LCD_CLASS_DEVICE 1
+#define CONFIG_MSM_KGSL_GPUMMU 1
 #define CONFIG_PMIC_TIME 1
 #define CONFIG_PACKET 1
 #define CONFIG_CPU_FREQ_GOV_CONSERVATIVE 1

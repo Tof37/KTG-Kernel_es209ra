@@ -2328,7 +2328,7 @@ static void __init es209ra_allocate_memory_regions(void)
 	pr_info("using %lu bytes of SMI at %lx physical for fb\n",
 	       size, (unsigned long)addr);
 
-#if 0
+#if 1
 	size = gpu_phys_size;
 	if (size) {
 		addr = alloc_bootmem(size);

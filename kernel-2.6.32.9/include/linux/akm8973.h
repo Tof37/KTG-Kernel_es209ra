@@ -70,11 +70,11 @@
 //#define ECS_CLK_ON	155	/*MISC5, bit3 */
 //#define ECS_INTR	161	/*INT2, bit1 */
 
-//struct akm8973_platform_data {
-//	int reset;
-//	int clk_on;
-//	int intr;
-//};
+struct akm8973_platform_data {
+	int reset;
+	int clk_on;
+	int intr;
+};
 
 //extern char *get_akm_cal_ram(void);
 

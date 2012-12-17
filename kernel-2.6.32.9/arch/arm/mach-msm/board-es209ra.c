@@ -121,7 +121,12 @@
 #define MSM_PMEM_SMI_SIZE	0x01500000
 
 #define MSM_FB_BASE		0x02B00000
-#define MSM_FB_SIZE		0x00500000
+#ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
+#define MSM_FB_SIZE     0x00278780
+#else
+#define MSM_FB_SIZE     0x001B0500
+#endif
+
 
 #define MSM_GPU_PHYS_BASE 	0x03000000
 #define MSM_GPU_PHYS_SIZE 	0x00200000
@@ -1068,14 +1073,6 @@ static struct kgsl_cpufreq_voter kgsl_cpufreq_voter = {
 	},
 };
 
-
-
-
-
-
-
-
-
 static struct resource kgsl_3d0_resources[] = {
        {
 		.name  = KGSL_3D0_REG_MEMORY,
@@ -1085,11 +1082,12 @@ static struct resource kgsl_3d0_resources[] = {
        },
        {
 		.name = KGSL_3D0_IRQ,
-		.start = 20,
-		.end = 20,
+		.start = INT_GRAPHICS,
+		.end = INT_GRAPHICS,
 		.flags = IORESOURCE_IRQ,
        },
 };
+
 static struct kgsl_device_platform_data kgsl_3d0_pdata = {
 	.pwr_data = {
 		.pwrlevel = {
@@ -1969,18 +1967,22 @@ static uint32_t msm_sdcc_setup_power(struct device *dv, unsigned int vdd)
 		clear_bit(pdev->id, &vreg_sts);
 
 		if (!vreg_sts) {
+#if 0 /* SEMC: temporary deleted (for s1+sp1 not boot problem) */
 			rc = vreg_disable(vreg_mmc);
 			if (rc)
 				printk(KERN_ERR "%s: return val: %d \n",
 					__func__, rc);
+#endif
 		}
 		return 0;
 	}
 
 	if (!vreg_sts) {
 		rc = vreg_set_level(vreg_mmc, PMIC_VREG_GP6_LEVEL);
+#if 0 /* SEMC: temporary deleted (for s1+sp1 not boot problem) */
 		if (!rc)
 			rc = vreg_enable(vreg_mmc);
+#endif
 		if (rc)
 			printk(KERN_ERR "%s: return val: %d \n",
 					__func__, rc);
@@ -2328,7 +2330,7 @@ static void __init es209ra_allocate_memory_regions(void)
 	pr_info("using %lu bytes of SMI at %lx physical for fb\n",
 	       size, (unsigned long)addr);
 
-#if 1
+#if 0
 	size = gpu_phys_size;
 	if (size) {
 		addr = alloc_bootmem(size);

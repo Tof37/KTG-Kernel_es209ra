@@ -502,10 +502,6 @@ static void nt35580_lcd_power_on(struct platform_device *pdev)
 	struct msm_fb_panel_data *panel;
 	panel = (struct msm_fb_panel_data *)pdev->dev.platform_data;
 
-#ifdef CONFIG_MACH_ES209RA
-	mddi_host_client_cnt_reset();
-#endif
-
 	if (panel && panel->panel_ext->power_on)
 		panel->panel_ext->power_on();
 }
@@ -594,10 +590,6 @@ static void nt35580_lcd_exit_sleep(void)
 
 static void nt35580_lcd_set_disply_on(struct work_struct *ignored)
 {
-#ifdef CONFIG_MACH_ES209RA
-	mddi_host_client_cnt_reset();
-#endif
-
 	write_client_reg(SET_DISPLAY_ON, 0x0000);
 	msleep(20);
 
@@ -744,12 +736,10 @@ static int __init mddi_nt35580_lcd_lcd_probe(struct platform_device *pdev)
 
 	nv_vsync = nt35580_lcd_get_nv_vsync();
 	nv_vsync >>= 16;
-	//nv_vsync &= (0xffff);
-	//if ((MIN_NV > nv_vsync) || (nv_vsync > MAX_NV))
-    //	nv_vsync = DEF_NV ;
-	panel_data->panel_info.lcd.refx100 = 5500;//100000000 / nv_vsync;
-	panel_data->panel_info.width = 51;
-	panel_data->panel_info.height = 89;
+	nv_vsync &= (0xffff);
+	if ((MIN_NV > nv_vsync) || (nv_vsync > MAX_NV))
+		nv_vsync = DEF_NV ;
+	panel_data->panel_info.lcd.refx100 = 100000000 / nv_vsync;
 
 	msm_fb_add_device(pdev);
 	return 0;

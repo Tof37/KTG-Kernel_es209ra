@@ -2265,7 +2265,7 @@ static int __msm_release(struct msm_sync *sync)
 		}
 		msm_queue_drain(&sync->pict_q, list_pict);
 
-#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE)
+#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE) ||defined(CONFIG_SEMC_IMX046_CAMERA)
 		wake_unlock(&sync->suspend_lock);
 #endif
 		wake_unlock(&sync->wake_lock);
@@ -2669,6 +2669,83 @@ static void msm_vpe_sync(struct msm_vpe_resp *vdata,
 	msm_enqueue(&sync->event_q, &qcmd->list_config);
 }
 
+#if defined(CONFIG_SEMC_IMX046_CAMERA)
+void msm_sensor_sync(struct msm_sensor_resp_t *vdata,
+	enum msm_queue qtype, void *syncdata)
+{
+	struct msm_queue_cmd *qcmd = NULL;
+	struct msm_sensor_resp_t *sensorcmd;
+	struct msm_sync *sync = (struct msm_sync *)syncdata;
+
+	if (!sync)
+		return;
+
+	sensorcmd = kmalloc(sizeof(struct msm_sensor_resp_t), GFP_ATOMIC);
+	if (!sensorcmd) {
+		CDBG("msm_sensor_sync: sensorcmd can't allocate buffer\n");
+		goto end;
+	}
+
+	qcmd = kmalloc(sizeof(struct msm_queue_cmd), GFP_ATOMIC);
+	if (!qcmd) {
+		CDBG("evt_msg: cannot allocate buffer\n");
+		goto mem_fail1;
+	}
+
+	sensorcmd->type = vdata->type;
+	sensorcmd->extdata = NULL;
+	sensorcmd->extlen = 0;
+
+	if (vdata->extlen > 0) {
+		sensorcmd->extdata = kmalloc(vdata->extlen, GFP_ATOMIC);
+		if(!sensorcmd->extdata) {
+			goto mem_fail2;
+		}
+		memcpy(sensorcmd->extdata, vdata->extdata, vdata->extlen);
+		sensorcmd->extlen = vdata->extlen;
+	}
+
+	if (MSM_CAM_Q_SENSOR_MSG == qtype) {
+		switch (sensorcmd->type) {
+		case SENSOR_RESP_MSG_EVENT:
+		case SENSOR_RESP_MSG_INT_EVENT:
+		case SENSOR_RESP_MSG_MSG_GENERAL:
+			break;
+		default:
+			goto mem_fail3;
+			break;
+		}
+		qcmd->type = MSM_CAM_Q_SENSOR_MSG;
+	} else {
+		goto mem_fail3;
+	}
+
+	qcmd->command = (void *)sensorcmd;
+	CDBG("sensorcmd->type = %d\n", sensorcmd->type);
+
+	CDBG("%s: msm_enqueue event_q\n", __func__);
+	msm_enqueue(&sync->event_q, &qcmd->list_config);
+
+	return;
+
+mem_fail3:
+	if (sensorcmd->extdata) {
+		kfree(sensorcmd->extdata);
+	}
+mem_fail2:
+	kfree(qcmd);
+mem_fail1:
+	kfree(sensorcmd);
+end:
+	return;
+}
+static struct msm_sensor_resp msm_sensor_s =
+{
+	.sensor_resp = msm_sensor_sync,
+};
+
+#endif//CONFIG_SEMC_IMX046_CAMERA
+
 static struct msm_vpe_callback msm_vpe_s = {
 	.vpe_resp = msm_vpe_sync,
 	.vpe_alloc = msm_vpe_sync_alloc,
@@ -2700,7 +2777,7 @@ static int __msm_open(struct msm_sync *sync, const char *const apps_id)
 	sync->apps_id = apps_id;
 
 	if (!sync->opencnt) {
-#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE)
+#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE) || defined(CONFIG_SEMC_IMX046_CAMERA)
 		wake_lock(&sync->suspend_lock);
 #endif
 		wake_lock(&sync->wake_lock);
@@ -2715,6 +2792,16 @@ static int __msm_open(struct msm_sync *sync, const char *const apps_id)
 					__func__, rc);
 				goto msm_open_done;
 			}
+#ifdef CONFIG_SEMC_IMX046_CAMERA
+			if (sync->sctrl.s_check) {
+				rc = sync->sctrl.s_check(sync, &msm_sensor_s);
+				if (rc < 0) {
+					pr_err("%s: sensor check failed at %d\n",
+						__func__, rc);
+					goto msm_open_done;
+				}
+			}
+#endif//CONFIG_SEMC_IMX046_CAMERA
 			rc = sync->sctrl.s_init(sync->sdata);
 			if (rc < 0) {
 				pr_err("%s: sensor init failed: %d\n",
@@ -2959,7 +3046,7 @@ static int msm_sync_init(struct msm_sync *sync,
 	msm_queue_init(&sync->pict_q, "pict");
 	msm_queue_init(&sync->vpe_q, "vpe");
 
-#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE)
+#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE) || defined(CONFIG_SEMC_IMX046_CAMERA)
 	wake_lock_init(&sync->suspend_lock,
 			WAKE_LOCK_SUSPEND,
 			"msm_camera_suspend");
@@ -2979,7 +3066,7 @@ static int msm_sync_init(struct msm_sync *sync,
 		pr_err("%s: failed to initialize %s\n",
 			__func__,
 			sync->sdata->sensor_name);
-#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE)
+#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE) || defined(CONFIG_SEMC_IMX046_CAMERA)
 		wake_lock_destroy(&sync->suspend_lock);
 #endif
 		wake_lock_destroy(&sync->wake_lock);
@@ -2994,7 +3081,7 @@ static int msm_sync_init(struct msm_sync *sync,
 
 static int msm_sync_destroy(struct msm_sync *sync)
 {
-#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE)
+#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE) || defined(CONFIG_SEMC_IMX046_CAMERA)
 	wake_lock_destroy(&sync->suspend_lock);
 #endif
 	wake_lock_destroy(&sync->wake_lock);

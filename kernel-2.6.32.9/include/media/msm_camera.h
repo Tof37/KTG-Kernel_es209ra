@@ -195,7 +195,44 @@ struct msm_vpe_evt_msg {
 #define MSM_CAM_RESP_CTRL         0
 #define MSM_CAM_RESP_STAT_EVT_MSG 1
 #define MSM_CAM_RESP_V4L2         2
-#define MSM_CAM_RESP_MAX          3
+#define MSM_CAM_RESP_SENSOR_MSG   3
+#define MSM_CAM_RESP_MAX          4
+
+enum sensor_int_type_type {
+	SENSOR_INT_TYPE_CAMERA,
+	SENSOR_INT_TYPE_VSYNC,
+
+	SENSOR_INT_TYPE_INVALID
+};
+
+struct msm_sensor_resp_int_camera_t {
+	uint32_t dummy;
+};
+
+struct msm_sensor_resp_int_vsync_t {
+	uint32_t dummy;
+};
+
+struct msm_sensor_resp_int_t {
+	enum sensor_int_type_type int_type;
+	union {
+		struct msm_sensor_resp_int_camera_t camera;
+		struct msm_sensor_resp_int_vsync_t vsync;
+	} ext_data;
+};
+
+enum sensor_resp_msg_type {
+	SENSOR_RESP_MSG_EVENT,
+	SENSOR_RESP_MSG_INT_EVENT,
+	SENSOR_RESP_MSG_MSG_GENERAL,
+	SENSOR_RESP_MSG_MSG_INVALID
+};
+
+struct msm_sensor_resp_t {
+	enum sensor_resp_msg_type type;
+	void *extdata;
+	int32_t extlen;
+};
 
 /* this one is used to send ctrl/status up to config thread */
 struct msm_stats_event_ctrl {
@@ -457,21 +494,32 @@ struct msm_snapshot_pp_status {
 #define CFG_GET_EXIF			    34
 #define CFG_SET_SCENE			    35
 #define CFG_GET_AF_ASSIST_LIGHT		36
-#define CFG_SET_SHARPNESS		    37
-#define CFG_SET_IMG_QUALITY		    38
-#define CFG_SET_EXPOSURE_COMPENSATION	39
-#define CFG_SET_ISO                 40
-#define CFG_SET_SENSOR_DIMENSION    41
-#define CFG_SET_FLASH               42
-#define CFG_GPIO_CTRL			43
-#define CFG_I2C_WRITE			44
-#define CFG_I2C_READ			45
-#define CFG_CSI_CTRL			46
-#define CFG_ROM_READ			47
+
+
+#define CFG_PARAM_WRITE			35
+#define CFG_PARAM_READ			36
+#define CFG_MEMORY_WRITE		37
+#define CFG_MEMORY_READ			38
+#define CFG_REGISTER_INT		39
+#define CFG_ENABLE_INT			40
+#define CFG_DISABLE_INT			41
+#define CFG_GPIO_CTRL			42
+#define CFG_SET_FOCUS_MODE		43
+
+//To keep compatibility with possible libs from eclair/GB
+#define CFG_SET_SHARPNESS		    	44
+#define CFG_SET_IMG_QUALITY		    	45
+#define CFG_SET_EXPOSURE_COMPENSATION	46
+#define CFG_SET_ISO                 	47
+#define CFG_SET_SENSOR_DIMENSION    	48
+#define CFG_SET_FLASH               	49
+//#define CFG_GPIO_CTRL					50
+#define CFG_I2C_WRITE					51
+#define CFG_I2C_READ					52
+#define CFG_CSI_CTRL					53
+#define CFG_ROM_READ					54
 /* extension end */
-#define CFG_MAX 					48
-
-
+#define CFG_MAX 						55
 
 #define MOVE_NEAR	0
 #define MOVE_FAR	1
@@ -607,6 +655,22 @@ enum camera_focus_mode {
 	SENSOR_FOCUS_MODE_FIXED
 };
 
+enum sensor_int_sync_type {
+	SENSOR_INT_DISABLE,
+	SENSOR_INT_ENABLE_NOT_USE,
+	SENSOR_INT_ENABLE_SYNC,
+	SENSOR_INT_ENABLE_ASYNC
+};
+
+struct sensor_int_enable_t {
+	enum sensor_int_type_type type;
+	enum sensor_int_sync_type sync;
+	uint32_t client_length;
+	uint8_t __user *client_data;
+	int32_t __user *timeout_ms;
+	int32_t count;
+};
+
 struct wb_info_cfg {
 	uint16_t red_gain;
 	uint16_t green_gain;
@@ -616,6 +680,18 @@ struct wb_info_cfg {
 enum sensor_gpio_ctrl_type {
 	SENSOR_GPIO_CTRL_RESET,
 	SENSOR_GPIO_CTRL_STANBY,
+};
+
+struct sensor_param_io_t {
+	uint16_t address;
+	uint8_t length;
+	uint8_t __user *data;
+};
+
+struct sensor_memory_io_t {
+	uint32_t address;
+	uint16_t length;
+	uint8_t __user *data;
 };
 
 struct sensor_gpio_ctrl {
@@ -689,6 +765,14 @@ struct sensor_cfg_data {
 		struct focus_cfg focus;
 		struct fps_cfg fps;
 		struct wb_info_cfg wb_info;
+
+#ifdef CONFIG_SEMC_IMX046_CAMERA
+		struct sensor_param_io_t param_io;
+		struct sensor_memory_io_t memory_io;
+		struct sensor_int_enable_t int_enable;
+#endif//CONFIG_SEMC_IMX046_CAMERA
+
+
 		/* extension begin */
 		struct camera_dimension_t dimension;
 		enum set_test_pattern_t set_test_pattern;

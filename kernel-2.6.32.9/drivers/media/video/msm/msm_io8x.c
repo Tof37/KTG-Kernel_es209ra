@@ -44,6 +44,10 @@
 #define MDDI_CLK_CHICKEN_BIT_SHFT  0x7
 #define APPS_RESET_OFFSET 0x00000214
 
+#if defined(CONFIG_SEMC_IMX046_CAMERA)
+#define SEMC_IMX046_CAMERA_DEFAULT_CLOCK_RATE 25869474
+#endif
+
 static struct clk *camio_vfe_mdc_clk;
 static struct clk *camio_mdc_clk;
 static struct clk *camio_vfe_clk;
@@ -183,6 +187,9 @@ int msm_camio_sensor_clk_on(struct platform_device *pdev)
 		goto mdc_no_mem;
 	camdev->camera_gpio_on();
 
+#if defined(CONFIG_SEMC_IMX046_CAMERA)
+	msm_camio_clk_rate_set(SEMC_IMX046_CAMERA_DEFAULT_CLOCK_RATE);
+#endif
 	msm_camio_clk_enable(CAMIO_VFE_CLK);
 	msm_camio_clk_enable(CAMIO_VFE_MDC_CLK);
 	return rc;

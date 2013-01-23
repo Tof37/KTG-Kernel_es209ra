@@ -51,6 +51,7 @@ enum msm_queue {
 	MSM_CAM_Q_VFE_EVT,  /* adsp event */
 	MSM_CAM_Q_VFE_MSG,  /* adsp message */
 	MSM_CAM_Q_V4L2_REQ, /* v4l2 request */
+	MSM_CAM_Q_SENSOR_MSG,
 	MSM_CAM_Q_VPE_MSG,  /* adsp message */
 };
 
@@ -183,7 +184,12 @@ struct msm_sensor_ctrl {
 #ifdef CONFIG_MACH_SEMC_ZEUS
 	int (*s_get_capture_started)(void);
 #endif /* CONFIG_MACH_SEMC_ZEUS */
+#if CONFIG_SEMC_IMX046_CAMERA
+	int (*s_check)(void *, void *);
+#endif
+
 };
+
 struct msm_strobe_flash_ctrl {
 	int (*strobe_flash_init)
 		(struct msm_camera_sensor_strobe_flash_data *);
@@ -248,7 +254,7 @@ struct msm_sync {
 	struct msm_camvpe_fn vpefn;
 	struct msm_sensor_ctrl sctrl;
 	struct msm_strobe_flash_ctrl sfctrl;
-#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE)
+#if defined(CONFIG_SEMC_CAMERA_MODULE) || defined(CONFIG_SEMC_SUB_CAMERA_MODULE) || defined(CONFIG_SEMC_IMX046_CAMERA)
 	struct wake_lock suspend_lock;
 #endif
 	struct wake_lock wake_lock;
@@ -325,6 +331,10 @@ struct axidata {
 	uint32_t bufnum2;
 	uint32_t bufnum3;
 	struct msm_pmem_region *region;
+};
+struct msm_sensor_resp
+{
+	void (*sensor_resp)(struct msm_sensor_resp_t *, enum msm_queue, void *syncdata);
 };
 
 #ifdef CONFIG_MSM_CAMERA_FLASH

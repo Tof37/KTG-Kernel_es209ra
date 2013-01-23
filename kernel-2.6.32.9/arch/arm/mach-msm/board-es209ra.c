@@ -121,7 +121,15 @@
 #define MSM_PMEM_SMI_SIZE	0x01500000
 
 #define MSM_FB_BASE		0x02B00000
-#define MSM_FB_SIZE		0x00500000
+
+#ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
+#define MSM_FB_SIZE     0x00278780
+#define MSM_FB_NUM  3
+#else
+#define MSM_FB_SIZE     0x001B0500
+#define MSM_FB_NUM  2
+#endif
+//#define MSM_FB_SIZE		0x00300000 // 0x00500000
 
 #define MSM_GPU_PHYS_BASE 	0x03000000
 #define MSM_GPU_PHYS_SIZE 	0x00200000
@@ -846,10 +854,10 @@ static void __init msm_mddi_tmd_fwvga_display_device_init(void)
 	panel_data->panel_info.pdest = DISPLAY_1;
 	panel_data->panel_info.wait_cycle = 0;
 	panel_data->panel_info.bpp = 16;
-	panel_data->panel_info.clk_rate = 192000000;
-	panel_data->panel_info.clk_min =  190000000;
-	panel_data->panel_info.clk_max = 200000000;
-	panel_data->panel_info.fb_num = 2;
+	panel_data->panel_info.clk_rate = 200000000;
+	panel_data->panel_info.clk_min =  192000000;
+	panel_data->panel_info.clk_max =  200000000;
+	panel_data->panel_info.fb_num = MSM_FB_NUM;
 
 	panel_data->panel_info.mddi.vdopkt = MDDI_DEFAULT_PRIM_PIX_ATTR;
 
@@ -1007,13 +1015,13 @@ static struct msm_gpio bt_config_power_on[] = {
 };
 /*
 static struct msm_gpio bt_config_power_off[] = {
-	{ GPIO_CFG(29, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// WAKE 
-	{ GPIO_CFG(21, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// HOST_WAKE 
-	{ GPIO_CFG(77, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// PWR_EN 
-	{ GPIO_CFG(157, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// RFR 
-	{ GPIO_CFG(141, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// CTS 
-	{ GPIO_CFG(139, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// Rx 
-	{ GPIO_CFG(140, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// Tx 
+	{ GPIO_CFG(29, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// WAKE
+	{ GPIO_CFG(21, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// HOST_WAKE
+	{ GPIO_CFG(77, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// PWR_EN
+	{ GPIO_CFG(157, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// RFR
+	{ GPIO_CFG(141, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// CTS
+	{ GPIO_CFG(139, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// Rx
+	{ GPIO_CFG(140, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA)},	// Tx
 };
 */
 static int bluetooth_power(int on)
@@ -1076,7 +1084,7 @@ static struct kgsl_cpufreq_voter kgsl_cpufreq_voter = {
 
 
 
- 
+
 
 ///////////////////////////////////////////////////////////////////////
 // KGSL (HW3D support)#include <linux/android_pmem.h>
@@ -1425,7 +1433,7 @@ static struct i2c_board_info msm_i2c_board_info[] __initdata = {
 	},
 #endif
 	{
-		I2C_BOARD_INFO("bma150", 0x38), 
+		I2C_BOARD_INFO("bma150", 0x38),
 		.irq		   =  INT_ES209RA_GPIO_ACCEL,
 		.platform_data = &bma150_ng_platform_data,
 	},
@@ -2308,7 +2316,7 @@ void smsm_wait_for_modem(void) __init;
 static void __init es209ra_init(void)
 {
 	smsm_wait_for_modem();
-	
+
 	if (socinfo_init() < 0)
 		printk(KERN_ERR "%s: socinfo_init() failed!\n", __func__);
 	printk(KERN_INFO "%s: startup_reason: 0x%08x\n",

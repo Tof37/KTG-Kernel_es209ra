@@ -24,6 +24,7 @@
 #include <linux/power_supply.h>
 #include <linux/semc/power/semc_power.h>
 #include <linux/wait.h>
+#include <linux/sched.h>
 #include <linux/wakelock.h>
 #include <mach/semc_power_platform.h>
 #include "bq24180.h"

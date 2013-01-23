@@ -1076,6 +1076,79 @@ static struct kgsl_cpufreq_voter kgsl_cpufreq_voter = {
 
 
 
+ 
+
+///////////////////////////////////////////////////////////////////////
+// KGSL (HW3D support)#include <linux/android_pmem.h>
+///////////////////////////////////////////////////////////////////////
+static int es209ra_kgsl_power_rail_mode(int follow_clk)
+{
+	int mode = follow_clk ? 0 : 1;
+	int rail_id = 0;
+	return msm_proc_comm(PCOM_CLK_REGIME_SEC_RAIL_CONTROL, &rail_id, &mode);
+}
+
+static int es209ra_kgsl_power(bool on)
+{
+	int cmd;
+	int rail_id = 0;
+
+    	cmd = on ? PCOM_CLK_REGIME_SEC_RAIL_ENABLE : PCOM_CLK_REGIME_SEC_RAIL_DISABLE;
+    	return msm_proc_comm(cmd, &rail_id, 0);
+}
+
+/* start kgsl-3d0 */
+static struct resource kgsl_3d0_resources[] = {
+	{
+		.name  = KGSL_3D0_REG_MEMORY,
+		.start = 0xA0000000,
+		.end = 0xA001ffff,
+		.flags = IORESOURCE_MEM,
+	},
+	{
+		.name = KGSL_3D0_IRQ,
+		.start = INT_GRAPHICS,
+		.end = INT_GRAPHICS,
+		.flags = IORESOURCE_IRQ,
+	},
+};
+
+static struct kgsl_device_platform_data kgsl_3d0_pdata = {
+	.pwr_data = {
+		.pwrlevel = {
+			{
+				.gpu_freq = 0,
+				.bus_freq = 128000000,
+			},
+		},
+		.init_level = 0,
+		.num_levels = 1,
+		.set_grp_async = NULL,
+		.idle_timeout = HZ/5,
+	},
+	.clk = {
+		.name = {
+			.clk = "grp_clk",
+		},
+	},
+	.imem_clk_name = {
+		.clk = "imem_clk",
+	},
+};
+
+struct platform_device msm_kgsl_3d0 = {
+	.name = "kgsl-3d0",
+	.id = 0,
+	.num_resources = ARRAY_SIZE(kgsl_3d0_resources),
+	.resource = kgsl_3d0_resources,
+	.dev = {
+		.platform_data = &kgsl_3d0_pdata,
+	},
+};
+/* end kgsl-3d0 */
+/*
+
+
 static struct resource kgsl_3d0_resources[] = {
        {
 		.name  = KGSL_3D0_REG_MEMORY,
@@ -1117,7 +1190,7 @@ static struct kgsl_device_platform_data kgsl_3d0_pdata = {
 		.clk = "imem_clk",
 	},
 };
- 
+
 static struct platform_device msm_kgsl_3d0 = {
        .name = "kgsl-3d0",
        .id = 0,
@@ -1126,7 +1199,7 @@ static struct platform_device msm_kgsl_3d0 = {
 	.dev = {
 		.platform_data = &kgsl_3d0_pdata,
 	},
-};
+};*/
 
 #ifdef CONFIG_ES209RA_HEADSET
 struct es209ra_headset_platform_data es209ra_headset_data = {
@@ -2283,6 +2356,14 @@ static void __init es209ra_init(void)
 	spi_register_board_info(msm_spi_board_info,
 				ARRAY_SIZE(msm_spi_board_info));
 	msm_pm_set_platform_data(msm_pm_data, ARRAY_SIZE(msm_pm_data));
+
+       /* set the gpu power rail to manual mode so clk en/dis will not
+	* turn off gpu power, and hang it on resume */
+
+	es209ra_kgsl_power_rail_mode(0);
+	es209ra_kgsl_power(false);
+	mdelay(100);
+	es209ra_kgsl_power(true);
 	platform_device_register(&es209ra_keypad_device);
 	msm_mddi_tmd_fwvga_display_device_init();
 }

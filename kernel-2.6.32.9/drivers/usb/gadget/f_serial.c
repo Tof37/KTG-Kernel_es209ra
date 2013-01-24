@@ -10,6 +10,7 @@
  * either version 2 of that License or (at your option) any later version.
  */
 
+#include <linux/slab.h>
 #include <linux/kernel.h>
 #include <linux/device.h>
 #include <linux/usb/android_composite.h>
@@ -321,6 +322,7 @@ static int gser_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 {
 	struct f_gser		 *gser = func_to_gser(f);
 	struct usb_composite_dev *cdev = f->config->cdev;
+	int rc = 0;
 
 	/* we know alt == 0, so this is an activation or a reset */
 
@@ -332,7 +334,12 @@ static int gser_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 	gser->notify_desc = ep_choose(cdev->gadget,
 			gser->hs.notify,
 			gser->fs.notify);
-	usb_ep_enable(gser->notify, gser->notify_desc);
+	rc = usb_ep_enable(gser->notify, gser->notify_desc);
+	if (rc) {
+		ERROR(cdev, "can't enable %s, result %d\n",
+					gser->notify->name, rc);
+		return rc;
+	}
 	gser->notify->driver_data = gser;
 #endif
 
@@ -348,12 +355,12 @@ static int gser_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 			gser->hs.out, gser->fs.out);
 	gserial_connect(&gser->port, gser->port_num);
 	gser->online = 1;
-	return 0;
+	return rc;
 }
 
 static void gser_disable(struct usb_function *f)
 {
-	struct f_gser	         *gser = func_to_gser(f);
+	struct f_gser	*gser = func_to_gser(f);
 	struct usb_composite_dev *cdev = f->config->cdev;
 
 	DBG(cdev, "generic ttyGS%d deactivated\n", gser->port_num);
@@ -529,9 +536,9 @@ static int
 gser_bind(struct usb_configuration *c, struct usb_function *f)
 {
 	struct usb_composite_dev *cdev = c->cdev;
-	struct f_gser            *gser = func_to_gser(f);
-	int			 status;
-	struct usb_ep		 *ep;
+	struct f_gser		*gser = func_to_gser(f);
+	int			status;
+	struct usb_ep		*ep;
 
 	/* allocate instance-specific interface IDs */
 	status = usb_interface_id(c, f);
@@ -644,6 +651,7 @@ gser_unbind(struct usb_configuration *c, struct usb_function *f)
 #ifdef CONFIG_MODEM_SUPPORT
 	struct f_gser *gser = func_to_gser(f);
 #endif
+	gser_disconnect(&gser->port);
 	if (gadget_is_dualspeed(c->cdev->gadget))
 		usb_free_descriptors(f->hs_descriptors);
 	usb_free_descriptors(f->descriptors);
@@ -667,7 +675,7 @@ gser_unbind(struct usb_configuration *c, struct usb_function *f)
  */
 int gser_bind_config(struct usb_configuration *c, u8 port_num)
 {
-	struct f_gser *gser;
+	struct f_gser	*gser;
 	int		status;
 
 	/* REVISIT might want instance-specific strings to help
@@ -699,11 +707,13 @@ int gser_bind_config(struct usb_configuration *c, u8 port_num)
 	gser->port.func.set_alt = gser_set_alt;
 	gser->port.func.disable = gser_disable;
 #ifdef CONFIG_MODEM_SUPPORT
-	/* We support only two ports for now */
+	/* We support only three ports for now */
 	if (port_num == 0)
 		gser->port.func.name = "modem";
-	else
+	else if (port_num == 1)
 		gser->port.func.name = "nmea";
+	else
+		gser->port.func.name = "at";
 	gser->port.func.setup = gser_setup;
 	gser->port.connect = gser_connect;
 	gser->port.get_dtr = gser_get_dtr;
@@ -722,11 +732,12 @@ int gser_bind_config(struct usb_configuration *c, u8 port_num)
 
 #ifdef CONFIG_USB_F_SERIAL
 
+#if 0
 int fserial_nmea_bind_config(struct usb_configuration *c)
 {
 	return gser_bind_config(c, 1);
 }
-
+ 
 static struct android_usb_function nmea_function = {
 	.name = "nmea",
 	.bind_config = fserial_nmea_bind_config,
@@ -746,10 +757,25 @@ int fserial_modem_bind_config(struct usb_configuration *c)
 	return gser_bind_config(c, 0);
 }
 
+int fserial_modem_unbind_config(struct usb_configuration *c)
+{
+	
+
+	/* See if composite driver can allocate
+	 * serial ports. But for now allocate
+	 * two ports for modem and nmea.
+	 */
+	gserial_cleanup();
+	return 0;
+}
+
+
 static struct android_usb_function modem_function = {
 	.name = "modem",
 	.bind_config = fserial_modem_bind_config,
+	.unbind_config = fserial_modem_unbind_config,
 };
+
 
 static int __init init(void)
 {
@@ -760,5 +786,6 @@ static int __init init(void)
 	return 0;
 }
 module_init(init);
+#endif
 
 #endif /* CONFIG_USB_ANDROID_ACM */

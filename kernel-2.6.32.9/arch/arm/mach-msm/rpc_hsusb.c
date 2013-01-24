@@ -122,6 +122,7 @@ static int msm_chg_init_rpc(unsigned long vers)
 		if (IS_ERR(chg_ep))
 			return -ENODATA;
 		chg_rpc_ids.vers_comp				= vers;
+		chg_rpc_ids.chg_is_charging_proc 		= 2;
 		chg_rpc_ids.chg_usb_charger_connected_proc 	= 7;
 		chg_rpc_ids.chg_usb_charger_disconnected_proc 	= 8;
 		chg_rpc_ids.chg_usb_i_is_available_proc 	= 9;
@@ -401,8 +402,6 @@ EXPORT_SYMBOL(msm_hsusb_is_serial_num_null);
 int msm_chg_usb_charger_connected(uint32_t device)
 {
 	int rc = 0;
-
-#ifdef CONFIG_USE_PMIC_CHARGING_ON_AMSS
 	struct hsusb_start_req {
 		struct rpc_request_hdr hdr;
 		uint32_t otg_dev;
@@ -435,7 +434,6 @@ int msm_chg_usb_charger_connected(uint32_t device)
 			__func__, rc);
 	} else
 		pr_debug("msm_chg_usb_charger_connected\n");
-#endif
 
 	return rc;
 }
@@ -445,7 +443,6 @@ int msm_chg_usb_i_is_available(uint32_t sample)
 {
 	int rc = 0;
 
-#ifdef CONFIG_USE_PMIC_CHARGING_ON_AMSS
 	struct hsusb_start_req {
 		struct rpc_request_hdr hdr;
 		uint32_t i_ma;
@@ -473,7 +470,6 @@ int msm_chg_usb_i_is_available(uint32_t sample)
 			__func__, rc);
 	} else
 		pr_debug("msm_chg_usb_i_is_available(%u)\n", sample);
-#endif
 
 	return rc;
 }
@@ -482,8 +478,6 @@ EXPORT_SYMBOL(msm_chg_usb_i_is_available);
 int msm_chg_usb_i_is_not_available(void)
 {
 	int rc = 0;
-
-#ifdef CONFIG_USE_PMIC_CHARGING_ON_AMSS
 	struct hsusb_start_req {
 		struct rpc_request_hdr hdr;
 	} req;
@@ -509,7 +503,6 @@ int msm_chg_usb_i_is_not_available(void)
 			"%d \n", __func__, rc);
 	} else
 		pr_debug("msm_chg_usb_i_is_not_available\n");
-#endif
 
 	return rc;
 }
@@ -518,8 +511,6 @@ EXPORT_SYMBOL(msm_chg_usb_i_is_not_available);
 int msm_chg_usb_charger_disconnected(void)
 {
 	int rc = 0;
-
-#ifdef CONFIG_USE_PMIC_CHARGING_ON_AMSS
 	struct hsusb_start_req {
 		struct rpc_request_hdr hdr;
 	} req;
@@ -546,7 +537,6 @@ int msm_chg_usb_charger_disconnected(void)
 			__func__, rc);
 	} else
 		pr_debug("msm_chg_usb_charger_disconnected\n");
-#endif
 
 	return rc;
 }
@@ -675,6 +665,31 @@ int msm_hsusb_disable_pmic_ulpidata0(void)
 	return msm_hsusb_pmic_ulpidata0_config(0);
 }
 EXPORT_SYMBOL(msm_hsusb_disable_pmic_ulpidata0);
+
+/* wrapper for sending pid and serial# info to bootloader */
+int usb_diag_update_pid_and_serial_num(uint32_t pid, const char *snum)
+{
+	int ret;
+
+	ret = msm_hsusb_send_productID(pid);
+	if (ret)
+		return ret;
+
+	if (!snum) {
+		ret = msm_hsusb_is_serial_num_null(1);
+		if (ret)
+			return ret;
+	}
+
+	ret = msm_hsusb_is_serial_num_null(0);
+	if (ret)
+		return ret;
+	ret = msm_hsusb_send_serial_number(snum);
+	if (ret)
+		return ret;
+
+	return 0;
+}
 
 static enum power_supply_property hsusb_chg_props[] = {
 	POWER_SUPPLY_PROP_ONLINE,
@@ -863,3 +878,163 @@ EXPORT_SYMBOL(msm_chg_rpc_semc_get_usb_connected);
 #endif /* CONFIG_SEMC_POWER ||
 	  CONFIG_SEMC_POWER_MODULE ||
 	  CONFIG_MAX17040_FUELGAUGE */
+
+#if defined(CONFIG_MACH_ES209RA)
+int msm_hsusb_chg_is_charging(void)
+{
+	struct hsusb_start_req {
+		struct rpc_request_hdr hdr;
+	} req;
+	struct hsusb_rpc_rep {
+		struct rpc_reply_hdr hdr;
+		u32 charge_status;
+	} rep;
+	int rc;
+
+	if (!chg_ep || IS_ERR(chg_ep))
+		return -EAGAIN;
+
+	rc = msm_rpc_call_reply(chg_ep, chg_rpc_ids.chg_is_charging_proc,
+				&req, sizeof(req),
+				&rep, sizeof(rep), (5 * HZ));
+	if (rc < 0) {
+		pr_err("%s: rpc call failed! error: (%d)"
+				"proc id: (0x%08x)\n",
+				__func__, rc,
+				chg_rpc_ids.chg_is_charging_proc);
+		return rc;
+	}
+
+	return be32_to_cpu(rep.charge_status);
+}
+EXPORT_SYMBOL(msm_hsusb_chg_is_charging);
+
+int msm_chg_battery_thermo(void)
+{
+	int rc = 0;
+	struct hsusb_start_req {
+		struct rpc_request_hdr hdr;
+	} req;
+	struct hsusb_rpc_rep {
+		struct rpc_reply_hdr hdr;
+		u32 battery_thermo;
+	} rep;
+	
+	memset(&rep, 0, sizeof(rep));
+	
+	if (!chg_ep || IS_ERR(chg_ep))
+		return -EAGAIN;
+
+	rc = msm_rpc_call_reply(chg_ep, chg_rpc_ids.chg_battery_thermo_proc,
+				&req, sizeof(req),
+				&rep, sizeof(rep), (5 * HZ));
+	if (rc < 0) {
+		printk(KERN_INFO "[RPC Check] msm_chg_battery_thermo() rc < 0\n");
+		pr_err("%s: rpc call failed! error: (%d)"
+				"proc id: (0x%08x)\n",
+				__func__, rc,
+				chg_rpc_ids.chg_battery_thermo_proc);
+		return rc;
+	}
+
+	return be32_to_cpu(rep.battery_thermo);
+}
+EXPORT_SYMBOL(msm_chg_battery_thermo);
+
+int msm_chg_charger_current(void)
+{
+	int rc = 0;
+	struct hsusb_start_req {
+		struct rpc_request_hdr hdr;
+	} req;
+	struct hsusb_rpc_rep {
+		struct rpc_reply_hdr hdr;
+		u32 charger_current;
+	} rep;
+
+	memset(&rep, 0, sizeof(rep));
+
+	if (!chg_ep || IS_ERR(chg_ep))
+		return -EAGAIN;
+
+	rc = msm_rpc_call_reply(chg_ep, chg_rpc_ids.chg_charger_current_proc,
+				&req, sizeof(req),
+				&rep, sizeof(rep), (5 * HZ));
+	if (rc < 0) {
+		printk(KERN_INFO "[RPC Check] msm_chg_charger_current() rc < 0\n");
+		pr_err("%s: rpc call failed! error: (%d)"
+				"proc id: (0x%08x)\n",
+				__func__, rc,
+				chg_rpc_ids.chg_charger_current_proc);
+		return rc;
+	}
+
+	return be32_to_cpu(rep.charger_current);
+}
+EXPORT_SYMBOL(msm_chg_charger_current);
+
+int msm_chg_qsd_thermo(void)
+{
+	int rc = 0;
+	struct hsusb_start_req {
+		struct rpc_request_hdr hdr;
+	} req;
+	struct hsusb_rpc_rep {
+		struct rpc_reply_hdr hdr;
+		u32 qsd_thermo;
+	} rep;
+
+	memset(&rep, 0, sizeof(rep));
+
+	if (!chg_ep || IS_ERR(chg_ep))
+		return -EAGAIN;
+
+	rc = msm_rpc_call_reply(chg_ep, chg_rpc_ids.chg_qsd_thermo_proc,
+				&req, sizeof(req),
+				&rep, sizeof(rep), (5 * HZ));
+	if (rc < 0) {
+		printk(KERN_INFO "[RPC Check] msm_chg_qsd_thermo() rc < 0\n");
+		pr_err("%s: rpc call failed! error: (%d)"
+				"proc id: (0x%08x)\n",
+				__func__, rc,
+				chg_rpc_ids.chg_qsd_thermo_proc);
+		return rc;
+	}
+
+	return be32_to_cpu(rep.qsd_thermo);
+}
+EXPORT_SYMBOL(msm_chg_qsd_thermo);
+
+int msm_chg_charger_thermo(void)
+{
+	int rc = 0;
+	struct hsusb_start_req {
+		struct rpc_request_hdr hdr;
+	} req;
+	struct hsusb_rpc_rep {
+		struct rpc_reply_hdr hdr;
+		u32 charger_thermo;
+	} rep;
+
+	memset(&rep, 0, sizeof(rep));
+
+	if (!chg_ep || IS_ERR(chg_ep))
+		return -EAGAIN;
+
+	rc = msm_rpc_call_reply(chg_ep, chg_rpc_ids.chg_charger_thermo_proc,
+				&req, sizeof(req),
+				&rep, sizeof(rep), (5 * HZ));
+	if (rc < 0) {
+		printk(KERN_INFO "[RPC Check] msm_chg_charger_thermo() rc < 0\n");
+		pr_err("%s: rpc call failed! error: (%d)"
+				"proc id: (0x%08x)\n",
+				__func__, rc,
+				chg_rpc_ids.chg_charger_thermo_proc);
+		return rc;
+	}
+
+	return be32_to_cpu(rep.charger_thermo);
+}
+EXPORT_SYMBOL(msm_chg_charger_thermo);
+
+#endif /* CONFIG_MACH_ES209RA */

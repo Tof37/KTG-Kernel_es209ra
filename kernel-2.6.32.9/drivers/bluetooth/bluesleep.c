@@ -150,8 +150,7 @@ static inline int bluesleep_can_sleep(void)
 {
 	/* check if MSM_WAKE_BT_GPIO and BT_WAKE_MSM_GPIO are both deasserted */
 	return gpio_get_value(bsi->ext_wake) &&
-		gpio_get_value(bsi->host_wake) &&
-		(bsi->uport != NULL);
+		gpio_get_value(bsi->host_wake); 
 }
 
 void bluesleep_sleep_wakeup(void)
@@ -173,6 +172,12 @@ void bluesleep_sleep_wakeup(void)
  */
 static void bluesleep_sleep_work(struct work_struct *work)
 {
+    if(bsi->uport == NULL)
+    {
+        // We can't do anythin hci has called unregister
+        BT_DBG("%s, no uport so just return. flags %ld\n", __func__, flags);
+        return;
+    }
 	if (bluesleep_can_sleep()) {
 		/* already asleep, this is an error case */
 		if (test_bit(BT_ASLEEP, &flags)) {
@@ -261,6 +266,7 @@ static int bluesleep_hci_event(struct notifier_block *this,
 			hu  = (struct hci_uart *) hdev->driver_data;
 			state = (struct uart_state *) hu->tty->driver_data;
 			bsi->uport = state->uart_port;
+            bluesleep_sleep_work(NULL);
 		}
 		break;
 	case HCI_DEV_UNREG:
@@ -376,6 +382,7 @@ fail:
 static void bluesleep_stop(void)
 {
 	unsigned long irq_flags;
+
 
 	spin_lock_irqsave(&rw_lock, irq_flags);
 
@@ -705,7 +712,6 @@ static int __init bluesleep_init(void)
 		retval = -ENOMEM;
 		goto fail;
 	}
-
 	flags = 0; /* clear all status bits */
 
 	/* Initialize spinlock. */

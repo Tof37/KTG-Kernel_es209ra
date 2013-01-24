@@ -502,10 +502,6 @@ static void nt35580_lcd_power_on(struct platform_device *pdev)
 	struct msm_fb_panel_data *panel;
 	panel = (struct msm_fb_panel_data *)pdev->dev.platform_data;
 
-#ifdef CONFIG_MACH_ES209RA
-	mddi_host_client_cnt_reset();
-#endif
-
 	if (panel && panel->panel_ext->power_on)
 		panel->panel_ext->power_on();
 }
@@ -594,10 +590,6 @@ static void nt35580_lcd_exit_sleep(void)
 
 static void nt35580_lcd_set_disply_on(struct work_struct *ignored)
 {
-#ifdef CONFIG_MACH_ES209RA
-	mddi_host_client_cnt_reset();
-#endif
-
 	write_client_reg(SET_DISPLAY_ON, 0x0000);
 	msleep(20);
 

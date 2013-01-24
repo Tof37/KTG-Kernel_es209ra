@@ -70,9 +70,12 @@
 #include "proc_comm.h"
 #include "cpufreq.h"
 #include <linux/msm_kgsl.h>
-#ifdef CONFIG_USB_ANDROID
-#include <linux/usb/android_composite.h>
+
+#ifdef CONFIG_USB_G_ANDROID
+#include <linux/usb/android.h>
+#include <mach/usbdiag.h>
 #endif
+
 #include "board-es209ra.h"
 #include "board-es209ra-keypad.h"
 #ifdef CONFIG_ES209RA_HEADSET
@@ -121,7 +124,6 @@
 #define MSM_PMEM_SMI_SIZE	0x01500000
 
 #define MSM_FB_BASE		0x02B00000
-
 #ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
 #define MSM_FB_SIZE     0x00278780
 #define MSM_FB_NUM  3
@@ -129,7 +131,7 @@
 #define MSM_FB_SIZE     0x001B0500
 #define MSM_FB_NUM  2
 #endif
-//#define MSM_FB_SIZE		0x00300000 // 0x00500000
+
 
 #define MSM_GPU_PHYS_BASE 	0x03000000
 #define MSM_GPU_PHYS_SIZE 	0x00200000
@@ -207,182 +209,20 @@ static struct platform_device ram_console_device = {
         .resource       = ram_console_resources,
 };
 
-
-#ifdef CONFIG_USB_ANDROID
-/* dynamic composition */
-static char *usb_func_msc[] = {
-	"usb_mass_storage",
-};
-static char *usb_func_msc_adb[] = {
-	"usb_mass_storage",
-	"adb",
-};
-
-static char *usb_func_msc_adb_eng[] = {
-	"usb_mass_storage",
-	"adb",
-	"modem",
-	"nmea",
-	"diag",
-};
-
-#if defined(CONFIG_USB_ANDROID_MTP_ARICENT)
-static char *usb_functions_mtp[] = {
-	"mtp",
-};
-
-static char *usb_functions_mtp_adb[] = {
-	"mtp",
-	"adb",
-};
-
-static char *usb_functions_mtp_msc[] = {
-	"mtp",
-	"usb_mass_storage",
-};
-
-static char *usb_functions_mtp_adb_eng[] = {
-	"mtp",
-	"adb",
-	"modem",
-	"nmea",
-	"diag",
-};
-#endif
-
-static char *usb_func_rndis[] = {
-	"rndis",
-};
-
-static char *usb_func_adb_rndis[] = {
-	"rndis",
-	"adb",
-};
-
-static char *usb_functions_diag[] = {
-	"adb",
-	"modem",
-	"diag",
-};
-
-static char *usb_functions_all[] = {
-	"rndis",
-	"usb_mass_storage",
-#if defined(CONFIG_USB_ANDROID_MTP_ARICENT)
-	"mtp",
-#endif
-	"adb",
-	"modem",
-	"nmea",
-	"diag",
-};
-static struct android_usb_product android_usb_products[] = {
-	{
-		.product_id = 0xE12E,
-		.functions = usb_func_msc,
-		.num_functions = ARRAY_SIZE(usb_func_msc),
-	},
-	{
-		.product_id = 0x612E,
-		.functions = usb_func_msc_adb,
-		.num_functions = ARRAY_SIZE(usb_func_msc_adb),
-	},
-#if defined(CONFIG_USB_ANDROID_MTP_ARICENT)
-	{
-		.product_id	= 0x0000 | CONFIG_USB_PRODUCT_SUFFIX,
-		.num_functions	= ARRAY_SIZE(usb_functions_mtp),
-		.functions	= usb_functions_mtp,
-	},
-	{
-		.product_id	= 0x512E | CONFIG_USB_PRODUCT_SUFFIX,
-		.num_functions	= ARRAY_SIZE(usb_functions_mtp_adb),
-		.functions	= usb_functions_mtp_adb,
-	},
-	{
-		.product_id	= 0x412E | CONFIG_USB_PRODUCT_SUFFIX,
-		.num_functions	= ARRAY_SIZE(usb_functions_mtp_msc),
-		.functions	= usb_functions_mtp_msc,
-	},
-#endif
-	{
-		.product_id = 0x712E,
-		.functions = usb_func_rndis,
-		.num_functions = ARRAY_SIZE(usb_func_rndis),
-	},
-	{
-		.product_id = 0x812E,
-		.functions = usb_func_adb_rndis,
-		.num_functions = ARRAY_SIZE(usb_func_adb_rndis),
-	},
-	{
-		.product_id	= 0x912E,
-		.functions	= usb_functions_diag,
-		.num_functions	= ARRAY_SIZE(usb_functions_diag),
-	},
-#if defined(CONFIG_USB_ANDROID_MTP_ARICENT)
-	{
-		.product_id	= 0x5146,
-		.num_functions	= ARRAY_SIZE(usb_functions_mtp_adb_eng),
-		.functions	= usb_functions_mtp_adb_eng,
-	},
-#endif
-	{
-		.product_id = 0x6146,
-		.functions = usb_func_msc_adb_eng,
-		.num_functions = ARRAY_SIZE(usb_func_msc_adb_eng),
-	},
-};
-
-static struct usb_mass_storage_platform_data mass_storage_pdata = {
-	.nluns = 1,
-	.vendor	= "SEMC",
-	.product = "Mass Storage",
-	.release = 0x0100,
-
-};
-
-static struct platform_device usb_mass_storage_device = {
-	.name	= "usb_mass_storage",
-	.id	= -1,
-	.dev	= {
-		.platform_data = &mass_storage_pdata,
-	},
-};
-
-static struct usb_ether_platform_data rndis_pdata = {
-	/* ethaddr is filled by board_serialno_setup */
-	.vendorID	= 0x0FCE,
-	.vendorDescr	= "SEMC",
-};
-
-static struct platform_device rndis_device = {
-	.name	= "rndis",
-	.id	= -1,
-	.dev	= {
-		.platform_data = &rndis_pdata,
-	},
-};
-
+#ifdef CONFIG_USB_G_ANDROID
 static struct android_usb_platform_data android_usb_pdata = {
-	.vendor_id		= 0x0FCE,
-	.product_id		= 0xE12E,
-	.version		= 0x0100,
-	.product_name		= "SEMC HSUSB Device",
-	.manufacturer_name	= "SEMC",
-	.serial_number		= "1234567890ABCDEF",
-	.num_products		= ARRAY_SIZE(android_usb_products),
-	.products		= android_usb_products,
-	.num_functions		= ARRAY_SIZE(usb_functions_all),
-	.functions		= usb_functions_all,
+        .update_pid_and_serial_num = usb_diag_update_pid_and_serial_num,
 };
+
 static struct platform_device android_usb_device = {
-	.name	= "android_usb",
-	.id		= -1,
-	.dev		= {
-		.platform_data = &android_usb_pdata,
-	},
+        .name       = "android_usb",
+        .id         = -1,
+        .dev        = {
+                .platform_data = &android_usb_pdata,
+        },
 };
 #endif
+
 
 
 #if 0
@@ -1076,15 +916,7 @@ static struct kgsl_cpufreq_voter kgsl_cpufreq_voter = {
 	},
 };
 
-
-
-
-
-
-
-
-
-
+ 
 
 ///////////////////////////////////////////////////////////////////////
 // KGSL (HW3D support)#include <linux/android_pmem.h>
@@ -1166,11 +998,12 @@ static struct resource kgsl_3d0_resources[] = {
        },
        {
 		.name = KGSL_3D0_IRQ,
-		.start = 20,
-		.end = 20,
+		.start = INT_GRAPHICS,
+		.end = INT_GRAPHICS,
 		.flags = IORESOURCE_IRQ,
        },
 };
+
 static struct kgsl_device_platform_data kgsl_3d0_pdata = {
 	.pwr_data = {
 		.pwrlevel = {
@@ -1433,7 +1266,7 @@ static struct i2c_board_info msm_i2c_board_info[] __initdata = {
 	},
 #endif
 	{
-		I2C_BOARD_INFO("bma150", 0x38),
+		I2C_BOARD_INFO("bma150", 0x38), 
 		.irq		   =  INT_ES209RA_GPIO_ACCEL,
 		.platform_data = &bma150_ng_platform_data,
 	},
@@ -1785,9 +1618,7 @@ static struct platform_device *devices[] __initdata = {
 	&mass_storage_device,
 #endif
 */
-#ifdef CONFIG_USB_ANDROID
-	&usb_mass_storage_device,
-	&rndis_device,
+#ifdef CONFIG_USB_G_ANDROID
 	&android_usb_device,
 #endif
 	&msm_device_tssc,
@@ -2050,18 +1881,22 @@ static uint32_t msm_sdcc_setup_power(struct device *dv, unsigned int vdd)
 		clear_bit(pdev->id, &vreg_sts);
 
 		if (!vreg_sts) {
+#if 0 /* SEMC: temporary deleted (for s1+sp1 not boot problem) */
 			rc = vreg_disable(vreg_mmc);
 			if (rc)
 				printk(KERN_ERR "%s: return val: %d \n",
 					__func__, rc);
+#endif
 		}
 		return 0;
 	}
 
 	if (!vreg_sts) {
 		rc = vreg_set_level(vreg_mmc, PMIC_VREG_GP6_LEVEL);
+#if 0 /* SEMC: temporary deleted (for s1+sp1 not boot problem) */
 		if (!rc)
 			rc = vreg_enable(vreg_mmc);
+#endif
 		if (rc)
 			printk(KERN_ERR "%s: return val: %d \n",
 					__func__, rc);
@@ -2316,7 +2151,7 @@ void smsm_wait_for_modem(void) __init;
 static void __init es209ra_init(void)
 {
 	smsm_wait_for_modem();
-
+	
 	if (socinfo_init() < 0)
 		printk(KERN_ERR "%s: socinfo_init() failed!\n", __func__);
 	printk(KERN_INFO "%s: startup_reason: 0x%08x\n",
@@ -2417,7 +2252,7 @@ static void __init es209ra_allocate_memory_regions(void)
 	pr_info("using %lu bytes of SMI at %lx physical for fb\n",
 	       size, (unsigned long)addr);
 
-#if 1
+#if 0
 	size = gpu_phys_size;
 	if (size) {
 		addr = alloc_bootmem(size);
@@ -2470,20 +2305,6 @@ static void __init es209ra_map_io(void)
 
 static int __init board_serialno_setup(char *serialno)
 {
-#ifdef CONFIG_USB_ANDROID
-	int i;
-	char *src = serialno;
-	android_usb_pdata.serial_number = serialno;
-	printk(KERN_INFO "USB serial number: %s\n", android_usb_pdata.serial_number);
-
-	rndis_pdata.ethaddr[0] = 0x02;
-	for (i = 0; *src; i++)
-		rndis_pdata.ethaddr[i % (ETH_ALEN -1)+1] ^= *src++;
-#endif
-#ifdef CONFIG_USB_FUNCTION
-	msm_hsusb_pdata.serial_number = serialno;
-	printk(KERN_INFO "USB serial number: %s\n", msm_hsusb_pdata.serial_number);
-#endif
 	return 1;
 }
 

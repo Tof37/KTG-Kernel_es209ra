@@ -1623,3 +1623,5 @@ source "security/Kconfig"
 source "crypto/Kconfig"
 
 source "lib/Kconfig"
+
+source "drivers/ar6000/Kconfig"

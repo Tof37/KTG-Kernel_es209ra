@@ -1,0 +1,6 @@
+config ATH6K_X10
+	tristate "Atheros WLAN for X10"
+        depends on WLAN_80211
+	help
+    Build atheros module for X10
+

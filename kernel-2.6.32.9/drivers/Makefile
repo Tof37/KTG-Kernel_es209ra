@@ -110,5 +110,6 @@ obj-$(CONFIG_SSB)		+= ssb/
 obj-$(CONFIG_VIRTIO)		+= virtio/
 obj-$(CONFIG_VLYNQ)		+= vlynq/
 obj-$(CONFIG_STAGING)		+= staging/
+obj-$(CONFIG_ATH6K_X10)   += ar6000/
 obj-y				+= platform/
 obj-y				+= ieee802154/

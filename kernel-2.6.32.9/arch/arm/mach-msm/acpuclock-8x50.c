@@ -44,6 +44,12 @@
 #define SCPLL_STATUS_ADDR      (MSM_SCPLL_BASE + 0x18)
 #define SCPLL_FSM_CTL_EXT_ADDR (MSM_SCPLL_BASE + 0x10)
 
+#define VREF_SEL     1	/* 0: 0.625V (50mV step), 1: 0.3125V (25mV step). */
+#define V_STEP       (25 * (2 - VREF_SEL)) /* Minimum voltage step size. */
+
+#define SEMC_ACPU_MIN_UV_MV 750U
+#define SEMC_ACPU_MAX_UV_MV 1500U
+
 #define dprintk(msg...) \
 	cpufreq_debug_printk(CPUFREQ_DEBUG_DRIVER, "cpufreq-msm", msg)
 
@@ -74,6 +80,8 @@ struct clkctl_acpu_speed {
 struct clkctl_acpu_speed acpu_freq_tbl_998[] = {
 	{ 0, 19200, ACPU_PLL_TCXO, 0, 0, 0, 0, 14000, 0, 0, 1000},
 	{ 0, 128000, ACPU_PLL_1, 1, 5, 0, 0, 14000, 2, 0, 1000},
+	// the below frequency may cause screen off reboots if implemented wrongly
+	{ 1, 192000, ACPU_PLL_0, 4, 0, 0, 0, 29000, 0, 0, 1000},
 	{ 1, 245760, ACPU_PLL_0, 4, 0, 0, 0, 29000, 0, 0, 1000},
 	/* Update AXI_S and PLL0_S macros if above row numbers change. */
 	{ 1, 384000, ACPU_PLL_3, 0, 0, 0, 0, 58000, 1, 0xA, 1000},
@@ -93,8 +101,15 @@ struct clkctl_acpu_speed acpu_freq_tbl_998[] = {
 	{ 0, 921600, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x18, 1300},
 	{ 0, 960000, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x19, 1300},
 	{ 1, 998400, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x1A, 1300},
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{ 1, 1036800, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x1B, 1325},
+	{ 1, 1075200, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x1C, 1325},
+	{ 1, 1113600, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x1D, 1350},
+	{ 1, 1152000, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x1E, 1400},
+	{ 1, 1190400, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x1F, 1400},
+	{ 1, 1228800, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x20, 1400},
+	{ 1, 1267200, ACPU_PLL_3, 0, 0, 0, 0, 128000, 1, 0x21, 1425},
 };
+
 
 struct clkctl_acpu_speed acpu_freq_tbl_768[] = {
 	{ 0, 19200, ACPU_PLL_TCXO, 0, 0, 0, 0, 14000, 0, 0, 1000},
@@ -129,7 +144,7 @@ static struct clkctl_acpu_speed *acpu_freq_tbl = acpu_freq_tbl_998;
 #define WAIT_FOR_IRQ_KHZ (PLL0_S->acpuclk_khz)
 
 #ifdef CONFIG_CPU_FREQ_MSM
-static struct cpufreq_frequency_table freq_table[20];
+static struct cpufreq_frequency_table freq_table[28];
 
 static void __init cpufreq_table_init(void)
 {
@@ -632,7 +647,11 @@ static void __init acpu_freq_tbl_fixup(void)
 		break;
 	case 0x30:
 	case 0x00:
+#ifdef CONFIG_MSM_CPU_FREQ_SET_MIN_MAX
+                max_acpu_khz = CONFIG_MSM_CPU_FREQ_MAX; 
+#else 
 		max_acpu_khz = 998400;
+#endif
 		break;
 	case 0x10:
 		max_acpu_khz = 1267200;
@@ -728,3 +747,48 @@ void __init msm_acpu_clock_init(struct msm_acpu_clock_platform_data *clkdata)
 	}
 #endif
 }
+
+
+#ifdef CONFIG_CPU_FREQ_VDD_LEVELS
+
+ssize_t acpuclk_get_vdd_levels_str(char *buf)
+{
+	int i, len = 0;
+	if (buf)
+	{
+		mutex_lock(&drv_state.lock);
+		for (i = 0; acpu_freq_tbl[i].acpuclk_khz; i++)
+		{
+			if(acpu_freq_tbl[i].use_for_scaling==1)
+			{
+				len += sprintf(buf + len, "%8u: %4d\n", acpu_freq_tbl[i].acpuclk_khz, acpu_freq_tbl[i].vdd);
+			}
+		}
+		mutex_unlock(&drv_state.lock);
+	}
+	return len;
+}
+
+void acpuclk_set_vdd(unsigned int khz, int vdd)
+{
+	int i;
+	unsigned int new_vdd;
+	vdd = vdd / V_STEP * V_STEP;
+	mutex_lock(&drv_state.lock);
+	for (i = 0; acpu_freq_tbl[i].acpuclk_khz; i++)
+	{
+		if(acpu_freq_tbl[i].use_for_scaling==1)
+		{
+			if (khz == 0)
+				new_vdd = min(max((unsigned int)(acpu_freq_tbl[i].vdd + vdd), SEMC_ACPU_MIN_UV_MV), SEMC_ACPU_MAX_UV_MV);
+			else if (acpu_freq_tbl[i].acpuclk_khz == khz)
+				new_vdd = min(max((unsigned int)vdd, SEMC_ACPU_MIN_UV_MV), SEMC_ACPU_MAX_UV_MV);
+			else continue;
+
+			acpu_freq_tbl[i].vdd = new_vdd;
+		}
+	}
+	mutex_unlock(&drv_state.lock);
+}
+
+#endif

@@ -1122,58 +1122,10 @@ static struct msm_acpu_clock_platform_data qsd8x50_clock_data = {
 	.acpu_set_vdd = qsd8x50_tps65023_set_dcdc1,
 };
 
-/* Driver(s) to be notified upon change in bdata */
-static char *bdata_supplied_to[] = {
-	MAX17040_NAME,
-};
 
 #ifdef CONFIG_MAX17040_FUELGAUGE
-static struct semc_battery_platform_data semc_battery_platform_data = {
-	.supplied_to = bdata_supplied_to,
-	.num_supplicants = ARRAY_SIZE(bdata_supplied_to),
-};
-
-static struct platform_device bdata_driver = {
-	.name = SEMC_BDATA_NAME,
-	.id = -1,
-	.dev = {
-		.platform_data = &semc_battery_platform_data,
-	},
-};
-
-static struct max17040_platform_data max17040_platform_data = {
-	.model_desc = {
-		.ocv_test = { 0xD9, 0x80 },
-		.soc_low = 0xF4,
-		.soc_high = 0xF6,
-		.model_data = {
-			{
-				0xA6, 0xA0, 0xB7, 0x50, 0xB8, 0xB0, 0xB8, 0xE0,
-				0xB9, 0x30, 0xBB, 0x60, 0xBB, 0xF0, 0xBC, 0x40
-			},
-			{
-				0xBC, 0xA0, 0xBD, 0x50, 0xBE, 0x20, 0xC0, 0x20,
-				0xC3, 0xF0, 0xC6, 0xE0, 0xCB, 0x40, 0xCF, 0x80
-			},
-			{
-				0x03, 0xA0, 0x1A, 0x80, 0xAD, 0x60, 0x43, 0x60,
-				0x00, 0x40, 0x7E, 0x40, 0x0E, 0x80, 0x72, 0x00
-			},
-			{
-				0x4C, 0x20, 0x3B, 0x40, 0x29, 0xE0, 0x1B, 0x00,
-				0x1B, 0x20, 0x13, 0x60, 0x12, 0x40, 0x12, 0x40
-			}
-		},
-		.exp = 1
-	},
-	.rcomp_data = {
-		.rcomp0 = 0x55,
-		.temp_co_hot = -1400,
-		.temp_co_cold = -9725,
-		.temp_div = 1000,
-	},
-	.chg_max_temp = 550,
-	.chg_min_temp = 50,
+static struct max17040_i2c_platform_data max17040_platform_data = {
+	.data = &max17040_dev_data
 };
 #endif
 
@@ -1255,7 +1207,7 @@ static struct i2c_board_info msm_i2c_board_info[] __initdata = {
 	},
 #ifdef CONFIG_MAX17040_FUELGAUGE
 	{
-		I2C_BOARD_INFO(MAX17040_NAME, 0x6C >> 1),
+		I2C_BOARD_INFO("max17040_fuel_gauge", 0x36),
 		.platform_data = &max17040_platform_data,
 	},
 #endif
@@ -1513,32 +1465,6 @@ static struct platform_device msm_wlan_ar6000_pm_device = {
         .resource       = NULL,
 };
 
-/*
-static u32 msm_calculate_batt_capacity(u32 current_voltage);
-
-static struct msm_psy_batt_pdata msm_psy_batt_data = {
-	.voltage_min_design 	= 3200,
-	.voltage_max_design	= 4200,
-	.avail_chg_sources   	= AC_CHG | USB_CHG ,
-	.batt_technology        = POWER_SUPPLY_TECHNOLOGY_LION,
-	.calculate_capacity	= &msm_calculate_batt_capacity,
-};
-
-static u32 msm_calculate_batt_capacity(u32 current_voltage)
-{
-	u32 low_voltage   = msm_psy_batt_data.voltage_min_design;
-	u32 high_voltage  = msm_psy_batt_data.voltage_max_design;
-
-	return (current_voltage - low_voltage) * 100
-		/ (high_voltage - low_voltage);
-}
-
-static struct platform_device msm_batt_device = {
-	.name 		    = "msm-battery",
-	.id		    = -1,
-	.dev.platform_data  = &msm_psy_batt_data,
-};
-*/
 
 #ifdef CONFIG_SEMC_LOW_BATT_SHUTDOWN
 static struct lbs_platform_data lbs_data = {
@@ -1585,7 +1511,6 @@ static int msm_hsusb_ldo_enable(int enable);
 
 /* Driver(s) to be notified upon change in USB */
 static char *hsusb_chg_supplied_to[] = {
-	MAX17040_NAME,
 };
 
 static struct msm_otg_platform_data msm_otg_pdata = {
@@ -1656,7 +1581,7 @@ static struct platform_device *devices[] __initdata = {
 #ifdef CONFIG_PMIC_TIME
 	&pmic_time_device,
 #endif
-	&bdata_driver,
+	//&bdata_driver,
 	//&msm_batt_device,
 };
 

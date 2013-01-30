@@ -188,7 +188,7 @@ obj-$(CONFIG_ES209RA_HEADSET) += es209ra_headset.o
 obj-$(CONFIG_MSM_NPA) += npa.o npa_resources.o msm_pm_qos.o msm_reqs.o
 obj-$(CONFIG_MSM_NPA_REMOTE) += npa_remote.o
 obj-$(CONFIG_MSM_NPA_REMOTE_ONCRPC) += npa_remote_rpc_client.o
-#obj-$(CONFIG_MAX17040_FUELGAUGE) += semc_max17040_settings.o
+obj-$(CONFIG_MAX17040_FUELGAUGE) += semc_max17040_settings.o
 obj-$(CONFIG_SEMC_LOW_BATT_SHUTDOWN) += semc_low_batt_shutdown.o
 
 obj-$(CONFIG_SEMC_RPC_SERVER_HANDSET) += semc_rpc_server_handset.o

@@ -118,7 +118,7 @@
 #define MSM_AUDIO_SIZE		0x80000
 
 #define MSM_SHARED_RAM_PHYS	0x00100000
-#define MSM_PMEM_SWIQI_SIZE 0xE00000
+//#define MSM_PMEM_SWIQI_SIZE 0xE00000
 
 #define MSM_PMEM_SMI_BASE	0x02B00000
 #define MSM_PMEM_SMI_SIZE	0x01500000
@@ -315,7 +315,7 @@ static struct android_pmem_platform_data android_pmem_kernel_ebi1_pdata = {
 
 static struct android_pmem_platform_data android_pmem_pdata = {
 	.name = "pmem",
-	.allocator_type = PMEM_ALLOCATORTYPE_ALLORNOTHING,
+	.allocator_type = PMEM_ALLOCATORTYPE_BITMAP,
 	.cached = 1,
 };
 
@@ -325,11 +325,11 @@ static struct android_pmem_platform_data android_pmem_adsp_pdata = {
 	.cached = 0,
 };
 
-static struct android_pmem_platform_data android_pmem_swiqi_pdata = {
+/*static struct android_pmem_platform_data android_pmem_swiqi_pdata = {
 	.name = "pmem_swiqi",
 	.allocator_type = PMEM_ALLOCATORTYPE_BITMAP,
 	.cached = 1,
-};
+};*/
 
 static struct platform_device android_pmem_device = {
 	.name = "android_pmem",
@@ -350,13 +350,13 @@ static struct platform_device android_pmem_kernel_ebi1_device = {
 	.dev = { .platform_data = &android_pmem_kernel_ebi1_pdata },
 };
 
-
+/*
 static struct platform_device android_pmem_swiqi_device = {
 	.name = "android_pmem",
 	.id = 5,
 	.dev = {.platform_data = &android_pmem_swiqi_pdata},
 };
-
+*/
 
 static struct resource msm_fb_resources[] = {
 	{
@@ -968,7 +968,7 @@ static struct kgsl_device_platform_data kgsl_3d0_pdata = {
 		.init_level = 0,
 		.num_levels = 1,
 		.set_grp_async = NULL,
-		.idle_timeout = HZ/5,
+		.idle_timeout = HZ/20,
 	},
 	.clk = {
 		.name = {
@@ -1538,7 +1538,7 @@ static struct platform_device *devices[] __initdata = {
 	&android_pmem_kernel_ebi1_device,
 	&android_pmem_device,
 	&android_pmem_adsp_device,
-	&android_pmem_swiqi_device,
+//	&android_pmem_swiqi_device,
 	&msm_device_nand,
 	&msm_device_i2c,
 	&qsd_device_spi,
@@ -2037,7 +2037,7 @@ static void __init pmem_adsp_size_setup(char **p)
 	pmem_adsp_size = memparse(*p, p);
 }
 __early_param("pmem_adsp_size=", pmem_adsp_size_setup);
-
+/*
 static unsigned pmem_swiqi_size = MSM_PMEM_SWIQI_SIZE;
 static void __init pmem_swiqi_size_setup(char **p)
 {
@@ -2045,7 +2045,7 @@ static void __init pmem_swiqi_size_setup(char **p)
 }
 
 __early_param("pmem_swiqi_size=", pmem_swiqi_size_setup);
-
+*/
 static unsigned audio_size = MSM_AUDIO_SIZE;
 static void __init audio_size_setup(char **p)
 {
@@ -2192,7 +2192,7 @@ static void __init es209ra_allocate_memory_regions(void)
 	}
 #endif//0
 
-	size = pmem_swiqi_size;
+/*	size = pmem_swiqi_size;
 
 	if (size) {
 		addr = alloc_bootmem(size);
@@ -2200,7 +2200,7 @@ static void __init es209ra_allocate_memory_regions(void)
 		android_pmem_swiqi_pdata.size = size;
 		pr_info("allocating %lu bytes at %p (%lx physical) for swiqi "
 			"pmem arena\n", size, addr, __pa(addr));
-	}
+	}*/
 
 	size = audio_size ? : MSM_AUDIO_SIZE;
 	addr = alloc_bootmem(size);

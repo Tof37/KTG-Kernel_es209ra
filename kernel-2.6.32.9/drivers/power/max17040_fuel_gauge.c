@@ -179,7 +179,7 @@ static struct power_supply max17040_power_supplies[] = {
 		.num_properties = ARRAY_SIZE(max17040_battery_properties),
 		.get_property = max17040_get_battery_property,
 	},
-	{
+	/*{
 		.name = "usb",
 		.type = POWER_SUPPLY_TYPE_USB,
 		.supplied_to = max17040_supply_list,
@@ -196,7 +196,7 @@ static struct power_supply max17040_power_supplies[] = {
 		.properties = max17040_power_properties,
 		.num_properties = ARRAY_SIZE(max17040_power_properties),
 		.get_property = max17040_get_power_property,
-	},
+	},*/
 };
 
 /* Registration result to the power supply of max17040_power_supplies[] */

@@ -104,7 +104,6 @@
 #define TOUCHPAD_IRQ 		38
 
 
-
 #define MSM_PMEM_MDP_SIZE	0x1C91000
 
 #define MSM_PMEM_SF_SIZE	0x1C91000
@@ -1415,7 +1414,7 @@ static struct msm_camera_device_platform_data msm_camera_device_data = {
 
 static struct msm_camera_sensor_flash_src msm_flash_src = {
 	.flash_sr_type = MSM_CAMERA_FLASH_SRC_PMIC,
-	._fsrc.pmic_src.num_of_src = 1,
+	//._fsrc.pmic_src.num_of_src = 1,
 	._fsrc.pmic_src.low_current  = 30,
 	._fsrc.pmic_src.high_current = 100,
 	//._fsrc.pmic_src.led_src_1 = 0,

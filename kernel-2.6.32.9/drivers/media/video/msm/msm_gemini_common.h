@@ -29,9 +29,8 @@
 #ifndef MSM_GEMINI_COMMON_H
 #define MSM_GEMINI_COMMON_H
 
-#define MSM_GEMINI_DEBUG
 #ifdef MSM_GEMINI_DEBUG
-#define GMN_DBG(fmt, args...) pr_debug(fmt, ##args)
+#define GMN_DBG(fmt, args...) printk(KERN_INFO "gemini: " fmt, ##args)
 #else
 #define GMN_DBG(fmt, args...) do { } while (0)
 #endif

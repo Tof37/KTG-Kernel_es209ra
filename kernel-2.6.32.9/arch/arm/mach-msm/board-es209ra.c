@@ -1249,7 +1249,7 @@ static uint32_t camera_off_gpio_table[] = {
 	GPIO_CFG(12, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA), /* PCLK */
 	GPIO_CFG(13, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA), /* HSYNC_IN */
 	GPIO_CFG(14, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA), /* VSYNC_IN */
-	GPIO_CFG(15, 0, GPIO_CFG_OUTPUT, GPIO_CFG_NO_PULL, GPIO_CFG_2MA),  /* MCLK */
+	GPIO_CFG(15, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA),  /* MCLK */
 	GPIO_CFG(27, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA), /* VCAML2_EN */
 	GPIO_CFG(43, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA), /* VCAML_EN */
 	GPIO_CFG(142,0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_DOWN, GPIO_CFG_2MA), /* VCAMSD_EN */
@@ -2108,9 +2108,6 @@ static void __init es209ra_init(void)
 #endif
 	platform_add_devices(devices, ARRAY_SIZE(devices));
 	msm_fb_add_devices();
-#ifdef CONFIG_MSM_CAMERA
-	config_camera_off_gpios(); /* might not be necessary */
-#endif
 	qsd8x50_init_usb();
 	hsusb_chg_set_supplicants(hsusb_chg_supplied_to,
 				  ARRAY_SIZE(hsusb_chg_supplied_to));
@@ -2214,10 +2211,12 @@ static void __init es209ra_fixup(struct machine_desc *desc, struct tag *tags,
 {
 	mi->nr_banks=2;
 	mi->bank[0].start = PHYS_OFFSET;
+	mi->bank[0].node = PHYS_TO_NID(mi->bank[0].start);
 	mi->bank[0].size = (232*1024*1024);
 
 	mi->bank[1].start = 0x30000000;
 	mi->bank[1].size = (127*1024*1024);
+	mi->bank[1].node = PHYS_TO_NID(mi->bank[1].start);
 }
 #endif
 

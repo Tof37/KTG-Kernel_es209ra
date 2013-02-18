@@ -143,7 +143,7 @@ static ssize_t mem_entry_sysfs_show(struct kobject *kobj,
 	return ret;
 }
 
-static const struct sysfs_ops mem_entry_sysfs_ops = {
+static struct sysfs_ops mem_entry_sysfs_ops = {
 	.show = mem_entry_sysfs_show,
 };
 

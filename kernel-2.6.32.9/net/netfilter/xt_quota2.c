@@ -15,9 +15,9 @@
 #include <linux/proc_fs.h>
 #include <linux/skbuff.h>
 #include <linux/spinlock.h>
+#include <linux/netlink.h>
 #include <asm/atomic.h>
 
-#include <linux/netlink.h>
 #include <linux/netfilter/x_tables.h>
 #include <linux/netfilter/xt_quota2.h>
 #ifdef CONFIG_NETFILTER_XT_MATCH_QUOTA2_LOG
@@ -234,28 +234,28 @@ q2_get_counter(const struct xt_quota_mtinfo2 *q)
 	return NULL;
 }
 
-static int quota_mt2_check(const struct xt_mtchk_param *par)
+static bool quota_mt2_check(const struct xt_mtchk_param *par)
 {
 	struct xt_quota_mtinfo2 *q = par->matchinfo;
 
 	pr_debug("xt_quota2: check() flags=0x%04x", q->flags);
 
 	if (q->flags & ~XT_QUOTA_MASK)
-		return -EINVAL;
+		return false;
 
 	q->name[sizeof(q->name)-1] = '\0';
 	if (*q->name == '.' || strchr(q->name, '/') != NULL) {
 		printk(KERN_ERR "xt_quota.3: illegal name\n");
-		return -EINVAL;
+		return false;
 	}
 
 	q->master = q2_get_counter(q);
 	if (q->master == NULL) {
 		printk(KERN_ERR "xt_quota.3: memory alloc failure\n");
-		return -ENOMEM;
+		return false;
 	}
 
-	return 0;
+	return true;
 }
 
 static void quota_mt2_destroy(const struct xt_mtdtor_param *par)
@@ -281,7 +281,7 @@ static void quota_mt2_destroy(const struct xt_mtdtor_param *par)
 }
 
 static bool
-quota_mt2(const struct sk_buff *skb, struct xt_action_param *par)
+quota_mt2(const struct sk_buff *skb, const struct xt_match_param *par)
 {
 	struct xt_quota_mtinfo2 *q = (void *)par->matchinfo;
 	struct xt_quota_counter *e = q->master;

@@ -14,6 +14,7 @@
 #include <linux/skbuff.h>
 #include <linux/netfilter/x_tables.h>
 #include <linux/netfilter_ipv4/ip_tables.h>
+#include <linux/netfilter_ipv6/ip6_tables.h>
 #include <net/tcp.h>
 #include <net/udp.h>
 #include <net/icmp.h>
@@ -22,13 +23,13 @@
 #include <net/netfilter/nf_tproxy_core.h>
 #include <net/netfilter/ipv4/nf_defrag_ipv4.h>
 
-/*
 #if defined(CONFIG_IP6_NF_IPTABLES) || defined(CONFIG_IP6_NF_IPTABLES_MODULE)
 #define XT_SOCKET_HAVE_IPV6 1
 #include <linux/netfilter_ipv6/ip6_tables.h>
-#include <net/netfilter/ipv6/nf_defrag_ipv6.h>
+#include <net/ipv6.h>
+
+#define nf_defrag_ipv6_enable()
 #endif
-*/
 
 #include <linux/netfilter/xt_socket.h>
 
@@ -105,7 +106,7 @@ extract_icmp4_fields(const struct sk_buff *skb,
 }
 
 struct sock*
-xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
+xt_socket_get4_sk(const struct sk_buff *skb, const struct xt_action_param *par)
 {
 	const struct iphdr *iph = ip_hdr(skb);
 	struct udphdr _hdr, *hp = NULL;
@@ -143,11 +144,11 @@ xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
 	 * reply packet of an established SNAT-ted connection. */
 
 	ct = nf_ct_get(skb, &ctinfo);
-	if (ct && !nf_ct_is_untracked(ct) &&
+	if (ct && (ct != &nf_conntrack_untracked) &&
 	    ((iph->protocol != IPPROTO_ICMP &&
-	      ctinfo == IP_CT_ESTABLISHED_REPLY) ||
+	      ctinfo == IP_CT_IS_REPLY + IP_CT_ESTABLISHED) ||
 	     (iph->protocol == IPPROTO_ICMP &&
-	      ctinfo == IP_CT_RELATED_REPLY)) &&
+	      ctinfo == IP_CT_IS_REPLY + IP_CT_RELATED)) &&
 	    (ct->status & IPS_SRC_NAT_DONE)) {
 
 		daddr = ct->tuplehash[IP_CT_DIR_ORIGINAL].tuple.src.u3.ip;
@@ -158,7 +159,7 @@ xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
 #endif
 
 	sk = nf_tproxy_get_sock_v4(dev_net(skb->dev), protocol,
-				   saddr, daddr, sport, dport, par->in, NFT_LOOKUP_ANY);
+				   saddr, daddr, sport, dport, par->in, false);
 
 	pr_debug("proto %hhu %pI4:%hu -> %pI4:%hu (orig %pI4:%hu) sock %p\n",
 		 protocol, &saddr, ntohs(sport),
@@ -170,7 +171,7 @@ xt_socket_get4_sk(const struct sk_buff *skb, struct xt_action_param *par)
 EXPORT_SYMBOL(xt_socket_get4_sk);
 
 static bool
-socket_match(const struct sk_buff *skb, struct xt_action_param *par,
+socket_match(const struct sk_buff *skb, const struct xt_action_param *par,
 	     const struct xt_socket_mtinfo1 *info)
 {
 	struct sock *sk;
@@ -189,7 +190,7 @@ socket_match(const struct sk_buff *skb, struct xt_action_param *par,
 		if (info && info->flags & XT_SOCKET_TRANSPARENT)
 			transparent = ((sk->sk_state != TCP_TIME_WAIT &&
 					inet_sk(sk)->transparent) ||
-					(sk->sk_state == TCP_TIME_WAIT &&
+				       (sk->sk_state == TCP_TIME_WAIT &&
 					inet_twsk(sk)->tw_transparent));
 
 		xt_socket_put_sk(sk);
@@ -268,7 +269,7 @@ extract_icmp6_fields(const struct sk_buff *skb,
 }
 
 struct sock*
-xt_socket_get6_sk(const struct sk_buff *skb, struct xt_action_param *par)
+xt_socket_get6_sk(const struct sk_buff *skb, const struct xt_action_param *par)
 {
 	struct ipv6hdr *iph = ipv6_hdr(skb);
 	struct udphdr _hdr, *hp = NULL;
@@ -314,7 +315,7 @@ xt_socket_get6_sk(const struct sk_buff *skb, struct xt_action_param *par)
 EXPORT_SYMBOL(xt_socket_get6_sk);
 
 static bool
-socket_mt6_v1(const struct sk_buff *skb, struct xt_action_param *par)
+socket_mt6_v1(const struct sk_buff *skb, const struct xt_action_param *par)
 {
 	struct sock *sk;
 	const struct xt_socket_mtinfo1 *info;
@@ -334,7 +335,7 @@ socket_mt6_v1(const struct sk_buff *skb, struct xt_action_param *par)
 		if (info && info->flags & XT_SOCKET_TRANSPARENT)
 			transparent = ((sk->sk_state != TCP_TIME_WAIT &&
 					inet_sk(sk)->transparent) ||
-					(sk->sk_state == TCP_TIME_WAIT &&
+				       (sk->sk_state == TCP_TIME_WAIT &&
 					inet_twsk(sk)->tw_transparent));
 
 		xt_socket_put_sk(sk);
@@ -366,16 +367,16 @@ static struct xt_match socket_mt_reg[] __read_mostly = {
 		.me		= THIS_MODULE,
 	},
 #ifdef XT_SOCKET_HAVE_IPV6
-       {
-		.name           = "socket",
-		.revision       = 1,
-		.family         = NFPROTO_IPV6,
-		.match          = socket_mt6_v1,
-		.matchsize      = sizeof(struct xt_socket_mtinfo1),
-		.hooks          = (1 << NF_INET_PRE_ROUTING) |
+	{
+		.name		= "socket",
+		.revision	= 1,
+		.family		= NFPROTO_IPV6,
+		.match		= socket_mt6_v1,
+		.matchsize	= sizeof(struct xt_socket_mtinfo1),
+		.hooks		= (1 << NF_INET_PRE_ROUTING) |
 				  (1 << NF_INET_LOCAL_IN),
-		.me             = THIS_MODULE,
-       },
+		.me		= THIS_MODULE,
+	},
 #endif
 };
 
@@ -385,6 +386,7 @@ static int __init socket_mt_init(void)
 #ifdef XT_SOCKET_HAVE_IPV6
 	nf_defrag_ipv6_enable();
 #endif
+
 	return xt_register_matches(socket_mt_reg, ARRAY_SIZE(socket_mt_reg));
 }
 

@@ -132,13 +132,24 @@ static void send_reset(struct sk_buff *oldskb, int hook)
 static inline void send_unreach(struct sk_buff *skb_in, int code)
 {
 	icmp_send(skb_in, ICMP_DEST_UNREACH, code, 0);
+#ifdef CONFIG_IP_NF_TARGET_REJECT_SKERR
+	if (skb_in->sk) {
+		skb_in->sk->sk_err = icmp_err_convert[code].errno;
+		skb_in->sk->sk_error_report(skb_in->sk);
+		pr_debug("ipt_REJECT: sk_err=%d for skb=%p sk=%p\n",
+			skb_in->sk->sk_err, skb_in, skb_in->sk);
+	}
+#endif
 }
 
 static unsigned int
-reject_tg(struct sk_buff *skb, const struct xt_action_param *par)
+reject_tg(struct sk_buff *skb, const struct xt_target_param *par)
 {
 	const struct ipt_reject_info *reject = par->targinfo;
 
+	/* WARNING: This code causes reentry within iptables.
+	   This means that the iptables jump stack is now crap.  We
+	   must return an absolute verdict. --RR */
 	switch (reject->with) {
 	case IPT_ICMP_NET_UNREACHABLE:
 		send_unreach(skb, ICMP_NET_UNREACH);

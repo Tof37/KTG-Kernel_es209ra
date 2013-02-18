@@ -1081,9 +1081,9 @@ static int adreno_waittimestamp(struct kgsl_device *device,
 {
 	long status = 0;
 	uint io = 1;
-	static uint io_cnt;
+	
 	struct adreno_device *adreno_dev = ADRENO_DEVICE(device);
-	struct kgsl_pwrctrl *pwr = &device->pwrctrl;
+	
 	int retries;
 	unsigned int msecs_first;
 	unsigned int msecs_part;

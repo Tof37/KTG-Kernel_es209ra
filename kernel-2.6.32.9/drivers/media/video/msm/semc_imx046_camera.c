@@ -847,7 +847,7 @@ static int32_t semc_imx046_camera_gpio_access(int gpio_pin, int dir)
 }
 
 static int32_t semc_imx046_camera_gpio_ctrl(
-		struct sensor_gpio_ctrl_t *gpio_ctrl)
+		struct sensor_gpio_ctrl *gpio_ctrl)
 {
 	int rc;
 

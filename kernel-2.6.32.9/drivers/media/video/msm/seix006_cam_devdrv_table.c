@@ -1,4 +1,4 @@
-/* drivers/media/video/msm/dlt001_cam_devdrv_table.c
+/* drivers/media/video/msm/seix006_cam_devdrv_table.c
  *
  * Copyright (C) 2010 Sony Ericsson Mobile Communications AB.
  *
@@ -9,53 +9,67 @@
  */
 
 #include <linux/types.h>
-#include "dlt001_cam_devdrv_table.h"
+#include "seix006_cam_devdrv_table.h"
 
 /****************************************************************
-vf_resolution_640x480 :: View Finder resolution 640x480
+vf_resolution_800x480 :: View Finder resolution 800x480
 ****************************************************************/
-const struct reg_entry dlt001_vf_resolution_640x480[] = {
+const struct reg_entry seix006_vf_resolution_800x480[] = {
+	{0x0022, 0x2003, REG_BITS_16},
+	{0x0028, 0xE001, REG_BITS_16},
+	{0x0026, 0x2003, REG_BITS_16},
+};
+
+int32_t sizeof_seix006_vf_resolution_800x480 =
+    sizeof(seix006_vf_resolution_800x480);
+
+/****************************************************************
+vf_resolution_640x480 :: View Finder resolution 640x480 
+****************************************************************/
+const struct reg_entry seix006_vf_resolution_640x480[] = {
 	{0x0022, 0x8002, REG_BITS_16},
 	{0x0028, 0xE001, REG_BITS_16},
+	{0x0026, 0x8002, REG_BITS_16},
 };
 
-int32_t sizeof_dlt001_vf_resolution_640x480 =
-    sizeof(dlt001_vf_resolution_640x480);
+int32_t sizeof_seix006_vf_resolution_640x480 =
+    sizeof(seix006_vf_resolution_640x480);
 
 /****************************************************************
-vf_resolution_320x240 :: View Finder resolution 320x240
+vf_resolution_320x240 :: View Finder resolution 320x240 
 ****************************************************************/
-const struct reg_entry dlt001_vf_resolution_320x240[] = {
+const struct reg_entry seix006_vf_resolution_320x240[] = {
 	{0x0022, 0x4001, REG_BITS_16},
 	{0x0028, 0xF000, REG_BITS_16},
+	{0x0026, 0x4001, REG_BITS_16},
 };
 
-int32_t sizeof_dlt001_vf_resolution_320x240 =
-    sizeof(dlt001_vf_resolution_320x240);
+int32_t sizeof_seix006_vf_resolution_320x240 =
+    sizeof(seix006_vf_resolution_320x240);
 
 /****************************************************************
-Mode_Monitor :: Mode change Monitor mode
+Mode_Monitor :: Mode change Monitor mode 
 ****************************************************************/
-const struct reg_entry dlt001_mode_monitor[] = {
+const struct reg_entry seix006_mode_monitor[] = {
 	{0x0011, 0x00, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_mode_monitor = sizeof(dlt001_mode_monitor);
+int32_t sizeof_seix006_mode_monitor = sizeof(seix006_mode_monitor);
 
 /****************************************************************
-Mode_HalfRelease :: Mode Half Release mode
+Mode_HalfRelease :: Mode Half Release mode 
 ****************************************************************/
-const struct reg_entry dlt001_mode_half_release[] = {
+const struct reg_entry seix006_mode_half_release[] = {
 	{0x6D77, 0x02, REG_BITS_8},
 	{0x0011, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_mode_half_release = sizeof(dlt001_mode_half_release);
+int32_t sizeof_seix006_mode_half_release = sizeof(seix006_mode_half_release);
 
 /****************************************************************
-Mode_HalfRelease :: Mode Half Release Auto Scene Start
+Mode_HalfRelease :: Mode Half Release Auto Scene Start 
 ****************************************************************/
-const struct reg_entry dlt001_hr_auto_start[] = {
+const struct reg_entry seix006_hr_auto_start[] = {
 	{0x6A01, 0x77, REG_BITS_8},
 	{0x6A02, 0x6D, REG_BITS_8},
 	{0x6A03, 0x02, REG_BITS_8},
@@ -76,12 +90,12 @@ const struct reg_entry dlt001_hr_auto_start[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_hr_auto_start = sizeof(dlt001_hr_auto_start);
+int32_t sizeof_seix006_hr_auto_start = sizeof(seix006_hr_auto_start);
 
 /****************************************************************
 Mode_HalfRelease :: Mode Half Release auto scene reset
 ****************************************************************/
-const struct reg_entry dlt001_hr_auto_reset[] = {
+const struct reg_entry seix006_hr_auto_reset[] = {
 	{0x6A01, 0x03, REG_BITS_8},
 	{0x6A02, 0x01, REG_BITS_8},
 	{0x6A03, 0x01, REG_BITS_8},
@@ -96,12 +110,20 @@ const struct reg_entry dlt001_hr_auto_reset[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_hr_auto_reset = sizeof(dlt001_hr_auto_reset);
+int32_t sizeof_seix006_hr_auto_reset = sizeof(seix006_hr_auto_reset);
+
+/****************************************************************
+Mode_Movie :: Mode Movie mode 
+****************************************************************/
+const struct reg_entry seix006_mode_movie[]={
+    {0x0011, 0x03, REG_BITS_8}, // Set MOVIE Mode
+};
+int32_t sizeof_seix006_mode_movie = sizeof(seix006_mode_movie);
 
 /****************************************************************
 Mode_HalfRelease :: Mode Half Release mode in Scene Twilight
 ****************************************************************/
-const struct reg_entry dlt001_hr_twilight[] = {
+const struct reg_entry seix006_hr_twilight[] = {
 	{0x6A01, 0x77, REG_BITS_8},
 	{0x6A02, 0x6D, REG_BITS_8},
 	{0x6A03, 0x02, REG_BITS_8},
@@ -126,12 +148,12 @@ const struct reg_entry dlt001_hr_twilight[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_hr_twilight = sizeof(dlt001_hr_twilight);
+int32_t sizeof_seix006_hr_twilight = sizeof(seix006_hr_twilight);
 
 /****************************************************************
 Mode_HalfRelease :: Mode Half Release mode reset
 ****************************************************************/
-const struct reg_entry dlt001_hr_reset[] = {
+const struct reg_entry seix006_hr_reset[] = {
 	{0x6A01, 0x4E, REG_BITS_8},
 	{0x6A02, 0x48, REG_BITS_8},
 	{0x6A03, 0x08, REG_BITS_8},
@@ -150,12 +172,12 @@ const struct reg_entry dlt001_hr_reset[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_hr_reset = sizeof(dlt001_hr_reset);
+int32_t sizeof_seix006_hr_reset = sizeof(seix006_hr_reset);
 
 /****************************************************************
 Mode_HalfRelease :: Mode Half Release with LED
 ****************************************************************/
-const struct reg_entry dlt001_hr_LED[] = {
+const struct reg_entry seix006_hr_LED[] = {
 	{0x6A01, 0x77, REG_BITS_8},
 	{0x6A02, 0x6D, REG_BITS_8},
 	{0x6A03, 0x02, REG_BITS_8},
@@ -201,8 +223,8 @@ const struct reg_entry dlt001_hr_LED[] = {
 	{0x6A2B, 0x03, REG_BITS_8},
 	{0x6A2C, 0x01, REG_BITS_8},
 	{0x6A2D, 0x00, REG_BITS_8},
-	{0x6A2E, 0x02, REG_BITS_8},
-	{0x6A2F, 0x01, REG_BITS_8},
+	{0x6A2E, 0x00, REG_BITS_8},
+	{0x6A2F, 0x00, REG_BITS_8},
 	{0x6A30, 0x00, REG_BITS_8},
 	{0x6A31, 0x8D, REG_BITS_8},
 	{0x6A32, 0x46, REG_BITS_8},
@@ -271,12 +293,12 @@ const struct reg_entry dlt001_hr_LED[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_hr_LED = sizeof(dlt001_hr_LED);
+int32_t sizeof_seix006_hr_LED = sizeof(seix006_hr_LED);
 
 /****************************************************************
 Mode_HalfRelease :: Mode Half Release LED Reset
 ****************************************************************/
-const struct reg_entry dlt001_hr_LED_reset[] = {
+const struct reg_entry seix006_hr_LED_reset[] = {
 	{0x6A01, 0x3E, REG_BITS_8},
 	{0x6A02, 0x46, REG_BITS_8},
 	{0x6A03, 0x4E, REG_BITS_8},
@@ -316,9 +338,9 @@ const struct reg_entry dlt001_hr_LED_reset[] = {
 	{0x6A25, 0x03, REG_BITS_8},
 	{0x6A26, 0x01, REG_BITS_8},
 	{0x6A27, 0x01, REG_BITS_8},
-	{0x6A28, 0x02, REG_BITS_8},
-	{0x6A29, 0x01, REG_BITS_8},
-	{0x6A2A, 0x20, REG_BITS_8},
+	{0x6A28, 0x00, REG_BITS_8},
+	{0x6A29, 0x00, REG_BITS_8},
+	{0x6A2A, 0x00, REG_BITS_8},
 	{0x6A2B, 0x00, REG_BITS_8},
 	{0x6A2C, 0x00, REG_BITS_8},
 	{0x6A2D, 0x00, REG_BITS_8},
@@ -392,22 +414,22 @@ const struct reg_entry dlt001_hr_LED_reset[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_hr_LED_reset = sizeof(dlt001_hr_LED_reset);
+int32_t sizeof_seix006_hr_LED_reset = sizeof(seix006_hr_LED_reset);
 
 /****************************************************************
 Mode_Capture :: Prepare mode capture
 ****************************************************************/
-const struct reg_entry dlt001_prepare_mode_capture[] = {
+const struct reg_entry seix006_prepare_mode_capture[] = {
 	{0x0039, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_prepare_mode_capture =
-    sizeof(dlt001_prepare_mode_capture);
+int32_t sizeof_seix006_prepare_mode_capture =
+    sizeof(seix006_prepare_mode_capture);
 
 /****************************************************************
-Mode_Capture :: Mode change Capture mode
+Mode_Capture :: Mode change Capture mode 
 ****************************************************************/
-const struct reg_entry dlt001_mode_capture[] = {
+const struct reg_entry seix006_mode_capture[] = {
 	{0x001D, 0x1B, REG_BITS_8},
 	{0x6A01, 0x11, REG_BITS_8},
 	{0x6A02, 0x00, REG_BITS_8},
@@ -425,169 +447,325 @@ const struct reg_entry dlt001_mode_capture[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_mode_capture = sizeof(dlt001_mode_capture);
+int32_t sizeof_seix006_mode_capture = sizeof(seix006_mode_capture);
 
 /****************************************************************
 Mode_Capture :: Mode change YUV Capture mode
 ****************************************************************/
-const struct reg_entry dlt001_mode_capture_YUV[] = {
+const struct reg_entry seix006_mode_capture_YUV[] = {
 	{0x001D, 0x00, REG_BITS_8},
 	{0x0011, 0x02, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_mode_capture_YUV = sizeof(dlt001_mode_capture_YUV);
+int32_t sizeof_seix006_mode_capture_YUV = sizeof(seix006_mode_capture_YUV);
 
 /****************************************************************
-Test Pattern :: Set test pattern on
+Mode_Capture :: Mode change RGB Capture mode
 ****************************************************************/
-const struct reg_entry dlt001_test_pattern_on[] = {
+const struct reg_entry seix006_mode_capture_RGB[] = {
+	{0x001D, 0x04, REG_BITS_8},
+	{0x0011, 0x02, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_mode_capture_RGB = sizeof(seix006_mode_capture_RGB);
+/****************************************************************
+Test Pattern :: Set test pattern on 
+****************************************************************/
+const struct reg_entry seix006_test_pattern_on[] = {
 	{0x3200, 0x04, REG_BITS_8},
 	{0x3202, 0x01, REG_BITS_8},
 	{0x2800, 0x01000204, REG_BITS_32},
 };
 
-int32_t sizeof_dlt001_test_pattern_on = sizeof(dlt001_test_pattern_on);
+int32_t sizeof_seix006_test_pattern_on = sizeof(seix006_test_pattern_on);
 
 /****************************************************************
-Test Pattern :: Set test pattern off
+Test Pattern :: Set test pattern off 
 ****************************************************************/
-const struct reg_entry dlt001_test_pattern_off[] = {
+const struct reg_entry seix006_test_pattern_off[] = {
 	{0x3200, 0x00, REG_BITS_8},
 	{0x3202, 0x00, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_test_pattern_off = sizeof(dlt001_test_pattern_off);
+int32_t sizeof_seix006_test_pattern_off = sizeof(seix006_test_pattern_off);
+
+/****************************************************************
+Snapshot_resolution_640x480 :: Snapshot resolution VGA 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_640x480[]={
+	{0x0024, 0x8002, REG_BITS_16}, // Set VGA snapshot (640x480)
+	{0x002A, 0xE001, REG_BITS_16}, // Set VGA snapshot (640x480)
+};
+int32_t sizeof_seix006_snapshot_resolution_640x480 = sizeof(seix006_snapshot_resolution_640x480);
 
 /****************************************************************
 Snapshot_resolution_640x480 :: Snapshot resolution VGA
 ****************************************************************/
-const struct reg_entry dlt001_snapshot_resolution_640x480[] = {
-	{0x0024, 0x8002, REG_BITS_16},
-	{0x002A, 0xE001, REG_BITS_16},
+const struct reg_entry seix006_snapshot_resolution_800x480[]={
+	{0x0024, 0x2003, REG_BITS_16}, // Set VGA snapshot (800x480)
+	{0x002A, 0xE001, REG_BITS_16}, // Set VGA snapshot (800x480)
 };
-
-int32_t sizeof_dlt001_snapshot_resolution_640x480 =
-    sizeof(dlt001_snapshot_resolution_640x480);
+int32_t sizeof_seix006_snapshot_resolution_800x480 = sizeof(seix006_snapshot_resolution_800x480);
 
 /****************************************************************
-Snapshot_resolution_1280x960 :: Snapshot resolution 1MP
+Snapshot_resolution_1280x960 :: Snapshot resolution 1MP 
 ****************************************************************/
-const struct reg_entry dlt001_snapshot_resolution_1280x960[] = {
-	{0x0024, 0x0005, REG_BITS_16},
-	{0x002A, 0xC003, REG_BITS_16},
+const struct reg_entry seix006_snapshot_resolution_1280x960[]={
+	{0x0024, 0x0005, REG_BITS_16}, // Set VGA snapshot (1280x960)
+	{0x002A, 0xC003, REG_BITS_16}, // Set VGA snapshot (1280x960)
 };
-
-int32_t sizeof_dlt001_snapshot_resolution_1280x960 =
-    sizeof(dlt001_snapshot_resolution_1280x960);
+int32_t sizeof_seix006_snapshot_resolution_1280x960 = sizeof(seix006_snapshot_resolution_1280x960);
 
 /****************************************************************
-Snapshot_resolution_1632x1224 :: Snapshot resolution 2MP
+Snapshot_resolution_1632x1224 :: Snapshot resolution 2MP 
 ****************************************************************/
-const struct reg_entry dlt001_snapshot_resolution_1632x1224[] = {
-	{0x0024, 0x6006, REG_BITS_16},
-	{0x002A, 0xC804, REG_BITS_16},
+const struct reg_entry seix006_snapshot_resolution_1632x1224[]={
+	{0x0024, 0x6006, REG_BITS_16}, // Set VGA snapshot (1632x1224)
+	{0x002A, 0xC804, REG_BITS_16}, // Set VGA snapshot (1632x1224)
 };
+int32_t sizeof_seix006_snapshot_resolution_1632x1224 = sizeof(seix006_snapshot_resolution_1632x1224);
 
-int32_t sizeof_dlt001_snapshot_resolution_1632x1224 =
-    sizeof(dlt001_snapshot_resolution_1632x1224);
 
 /****************************************************************
-Snapshot_resolution_2592x1944 :: Snapshot resolution 5MP
+Snapshot_resolution_176x144 :: Snapshot resolution QCIF 
 ****************************************************************/
-const struct reg_entry dlt001_snapshot_resolution_2592x1944[] = {
-	{0x0024, 0x200A, REG_BITS_16},
-	{0x002A, 0x9807, REG_BITS_16},
+const struct reg_entry seix006_snapshot_resolution_176x144[]={
+	{0x0024, 0xB000, REG_BITS_16}, // Set QCIF snapshot (176x144)
+	{0x002A, 0x9000, REG_BITS_16}, // Set QCIF snapshot (176x144)
 };
+int32_t sizeof_seix006_snapshot_resolution_176x144 = sizeof(seix006_snapshot_resolution_176x144);
 
-int32_t sizeof_dlt001_snapshot_resolution_2592x1944 =
-    sizeof(dlt001_snapshot_resolution_2592x1944);
+/****************************************************************
+Snapshot_resolution_320x240 :: Snapshot resolution QVGA 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_320x240[]={
+	{0x0024, 0x4001, REG_BITS_16}, // Set QVGA snapshot (320x240)
+	{0x002A, 0xF000, REG_BITS_16}, // Set QVGA snapshot (320x240)
+};
+int32_t sizeof_seix006_snapshot_resolution_320x240 = sizeof(seix006_snapshot_resolution_320x240);
+
+/****************************************************************
+Snapshot_resolution_352x288:: Snapshot resolution CIF 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_352x288[]={
+	{0x0024, 0x6001, REG_BITS_16}, // Set CIF snapshot (352x288)
+	{0x002A, 0x2001, REG_BITS_16}, // Set CIF snapshot (352x288)
+};
+int32_t sizeof_seix006_snapshot_resolution_352x288 = sizeof(seix006_snapshot_resolution_352x288);
+
+/****************************************************************
+Snapshot_resolution_800x600 :: Snapshot resolution 1MP SVGA 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_800x600[]={
+	{0x0024, 0x2003, REG_BITS_16}, // Set 1MP SVGA snapshot (800x600)
+	{0x002A, 0x5802, REG_BITS_16}, // Set 1MP SVGA snapshot (800x600)
+};
+int32_t sizeof_seix006_snapshot_resolution_800x600 = sizeof(seix006_snapshot_resolution_800x600);
+
+/****************************************************************
+Snapshot_resolution_1024x768 :: Snapshot resolution 1MP XGA
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_1024x768[]={
+	{0x0024, 0x0004, REG_BITS_16}, // Set 1MP XGA snapshot (1024x768)
+	{0x002A, 0x0003, REG_BITS_16}, // Set 1MP XGA snapshot (1024x768)
+};
+int32_t sizeof_seix006_snapshot_resolution_1024x768 = sizeof(seix006_snapshot_resolution_1024x768);
+
+/****************************************************************
+Snapshot_resolution_1280x720 :: Snapshot resolution HD720 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_1280x720[]={
+	{0x0024, 0x0005, REG_BITS_16}, // Set HD720 snapshot (1280x720)
+	{0x002A, 0xD002, REG_BITS_16}, // Set HD720 snapshot (1280x720)
+};
+int32_t sizeof_seix006_snapshot_resolution_1280x720 = sizeof(seix006_snapshot_resolution_1280x720);
+
+
+/****************************************************************
+Snapshot_resolution_1280x768 :: Snapshot resolution WXGA 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_1280x768[]={
+	{0x0024, 0x0005, REG_BITS_16}, // Set WXGA snapshot (1280x768)
+	{0x002A, 0x0003, REG_BITS_16}, // Set WXGA snapshot (1280x768)
+};
+int32_t sizeof_seix006_snapshot_resolution_1280x768 = sizeof(seix006_snapshot_resolution_1280x768);
+
+/****************************************************************
+Snapshot_resolution_1600x1200:: Snapshot resolution 2MP 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_1600x1200[]={
+	{0x0024, 0x4006, REG_BITS_16}, // Set 2MP snapshot (1600x1200)
+	{0x002A, 0xB004, REG_BITS_16}, // Set 2MP snapshot (1600x1200)
+};
+int32_t sizeof_seix006_snapshot_resolution_1600x1200 = sizeof(seix006_snapshot_resolution_1600x1200);
+
+/****************************************************************
+Snapshot_resolution_1920x1080 :: Snapshot resolution HD1080 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_1920x1080[]={
+	{0x0024, 0x8007, REG_BITS_16}, // Set HD1080 snapshot (1920x1080)
+	{0x002A, 0x3804, REG_BITS_16}, // Set HD1080 snapshot (1920x1080)
+};
+int32_t sizeof_seix006_snapshot_resolution_1920x1080 = sizeof(seix006_snapshot_resolution_1920x1080);
+
+/****************************************************************
+Snapshot_resolution_2048x1536 :: Snapshot resolution 3MP 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_2048x1536[]={
+	{0x0024, 0x0008, REG_BITS_16}, // Set 3MP snapshot (2048x1536)
+	{0x002A, 0x0006, REG_BITS_16}, // Set 3MP snapshot (2048x1536)
+};
+int32_t sizeof_seix006_snapshot_resolution_2048x1536 = sizeof(seix006_snapshot_resolution_2048x1536);
+
+/****************************************************************
+Snapshot_resolution_2592x1944 :: Snapshot resolution 5MP 
+****************************************************************/
+const struct reg_entry seix006_snapshot_resolution_2592x1944[]={
+	{0x0024, 0x200A, REG_BITS_16}, // Set 5MP snapshot (2592x1944)
+	{0x002A, 0x9807, REG_BITS_16}, // Set 5MP snapshot (2592x1944)
+};
+int32_t sizeof_seix006_snapshot_resolution_2592x1944 = sizeof(seix006_snapshot_resolution_2592x1944);
+
+
+//// Thumbnail dimensions are taken from QualcommHardware.cpp
+/****************************************************************
+ Set thumbnail dimensions. QCIF 
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_QCIF []={
+    {0x021A ,0xB000, REG_BITS_16}, // YUV interleaved thumbnail size 176
+    {0x021C ,0x9000, REG_BITS_16}  // YUV interleaved thumbnail size 144
+};
+int32_t sizeof_seix006_thumbnail_size_QCIF = sizeof(seix006_thumbnail_size_QCIF);
+
+/****************************************************************
+    Set thumbnail dimensions. WVGA.
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_WVGA[]={
+	{0x021A ,0x2003, REG_BITS_16}, // YUV interleaved thumbnail size 800
+	{0x021C ,0xE001, REG_BITS_16}  // YUV interleaved thumbnail size 480
+};
+int32_t sizeof_seix006_thumbnail_size_WVGA = sizeof(seix006_thumbnail_size_WVGA);
 
 /****************************************************************
     Set thumbnail dimensions. VGA.
 ****************************************************************/
-const struct reg_entry dlt001_thumbnail_size_VGA[] = {
-	{0x021A, 0x8002, REG_BITS_16},
-	{0x021C, 0xE001, REG_BITS_16}
+const struct reg_entry seix006_thumbnail_size_VGA[]={
+    {0x021A ,0x8002, REG_BITS_16}, // YUV interleaved thumbnail size 640
+    {0x021C ,0xE001, REG_BITS_16}  // YUV interleaved thumbnail size 480
 };
-
-int32_t sizeof_dlt001_thumbnail_size_VGA = sizeof(dlt001_thumbnail_size_VGA);
+int32_t sizeof_seix006_thumbnail_size_VGA = sizeof(seix006_thumbnail_size_VGA);
 
 /****************************************************************
     Set thumbnail dimensions. QVGA.
 ****************************************************************/
-const struct reg_entry dlt001_thumbnail_size_QVGA[] = {
-	{0x021A, 0x4001, REG_BITS_16},
-	{0x021C, 0xF000, REG_BITS_16}
+const struct reg_entry seix006_thumbnail_size_QVGA[]={
+    {0x021A ,0x4001, REG_BITS_16}, // YUV interleaved thumbnail size 320
+    {0x021C ,0xF000, REG_BITS_16} // YUV interleaved thumbnail size 240
 };
+int32_t sizeof_seix006_thumbnail_size_QVGA = sizeof(seix006_thumbnail_size_QVGA);
 
-int32_t sizeof_dlt001_thumbnail_size_QVGA = sizeof(dlt001_thumbnail_size_QVGA);
+/****************************************************************
+    Set thumbnail dimensions. WQVGA.
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_WQVGA[]={
+    {0x021A ,0x9001, REG_BITS_16}, // YUV interleaved thumbnail size 400
+    {0x021C ,0xF000, REG_BITS_16} // YUV interleaved thumbnail size 240
+};
+int32_t sizeof_seix006_thumbnail_size_WQVGA = sizeof(seix006_thumbnail_size_WQVGA);
+
+/****************************************************************
+    Set thumbnail dimensions. 512x384.
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_512x384[]={
+    {0x021A ,0x0002, REG_BITS_16}, // YUV interleaved thumbnail size 512
+    {0x021C ,0x8001, REG_BITS_16} // YUV interleaved thumbnail size 384
+};
+int32_t sizeof_seix006_thumbnail_size_512x384 = sizeof(seix006_thumbnail_size_512x384);
+
+/****************************************************************
+    Set thumbnail dimensions. 480x288.
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_480x288[]={
+    {0x021A ,0xE001, REG_BITS_16}, // YUV interleaved thumbnail size 480
+    {0x021C ,0x2001, REG_BITS_16} // YUV interleaved thumbnail size 288
+};
+int32_t sizeof_seix006_thumbnail_size_480x288 = sizeof(seix006_thumbnail_size_480x288);
+/****************************************************************
+    Set thumbnail dimensions. 432x288.
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_432x288[]={
+    {0x021A ,0xB001, REG_BITS_16}, // YUV interleaved thumbnail size 432
+    {0x021C ,0x2001, REG_BITS_16} // YUV interleaved thumbnail size 288
+};
+int32_t sizeof_seix006_thumbnail_size_432x288 = sizeof(seix006_thumbnail_size_432x288);
+/****************************************************************
+    Set thumbnail dimensions. 512x288.
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_512x288[]={
+    {0x021A ,0x0002, REG_BITS_16}, // YUV interleaved thumbnail size 512
+    {0x021C ,0x2001, REG_BITS_16} // YUV interleaved thumbnail size 288
+};
+int32_t sizeof_seix006_thumbnail_size_512x288 = sizeof(seix006_thumbnail_size_512x288);
+/****************************************************************
+    Set thumbnail dimensions. 352x288.
+****************************************************************/
+const struct reg_entry seix006_thumbnail_size_352x288[]={
+    {0x021A ,0x6001, REG_BITS_16}, // YUV interleaved thumbnail size 352
+    {0x021C ,0x2001, REG_BITS_16} // YUV interleaved thumbnail size 288
+};
+int32_t sizeof_seix006_thumbnail_size_352x288 = sizeof(seix006_thumbnail_size_352x288);
+
 
 /****************************************************************
 frame rate fixed 30 fps
 ****************************************************************/
-const struct reg_entry dlt001_framerate_30[] = {
-	{0x0103, 0x00, REG_BITS_8},
+const struct reg_entry seix006_framerate_30[] = {
+	// FPSTYPE_MONI
+	{0x0383, 0x02, REG_BITS_8},
+	// FPSTYPE_CAP
+	{0x0384, 0x02, REG_BITS_8},
+	// FPSTYPE_MOVIE
+	{0x0385, 0x02, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_framerate_30 = sizeof(dlt001_framerate_30);
+int32_t sizeof_seix006_framerate_30 = sizeof(seix006_framerate_30);
+
+/****************************************************************
+frame rate fixed 15 fps
+****************************************************************/
+const struct reg_entry seix006_framerate_15[] = {
+	// FPSTYPE_MONI
+	{0x0383, 0x03, REG_BITS_8},
+	// FPSTYPE_CAP
+	{0x0384, 0x03, REG_BITS_8},
+	// FPSTYPE_MOVIE
+	{0x0385, 0x03, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_framerate_15 = sizeof(seix006_framerate_15);
 
 /****************************************************************
 frame rate variable
 ****************************************************************/
-const struct reg_entry dlt001_framerate_variable[] = {
+const struct reg_entry seix006_framerate_variable[] = {
 	{0x0103, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_framerate_variable = sizeof(dlt001_framerate_variable);
+int32_t sizeof_seix006_framerate_variable = sizeof(seix006_framerate_variable);
 
 /****************************************************************
-focus mode auto
+frame rate fixed
 ****************************************************************/
-const struct reg_entry dlt001_focus_mode_auto[] = {
-	{0x002E, 0x02, REG_BITS_8},
-	{0x0012, 0x01, REG_BITS_8},
+const struct reg_entry seix006_framerate_fixed[] = {
+	{0x0103, 0x0, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_focus_mode_auto = sizeof(dlt001_focus_mode_auto);
-
-/****************************************************************
-focus mode continuous
-****************************************************************/
-const struct reg_entry dlt001_focus_mode_continuous[] = {
-	{0x002E, 0x01, REG_BITS_8},
-	{0x0012, 0x01, REG_BITS_8},
-};
-
-int32_t sizeof_dlt001_focus_mode_continuous = sizeof(dlt001_focus_mode_continuous);
-
-/****************************************************************
-primary focus window continuous
-****************************************************************/
-const struct reg_entry dlt001_primary_focus_window_continuous[] = {
-	{0x4C4C, 0x2E04, REG_BITS_16},
-	{0x4C4E, 0xC502, REG_BITS_16},
-	{0x4C50, 0x1702, REG_BITS_16},
-	{0x4C52, 0x1702, REG_BITS_16},
-};
-
-int32_t sizeof_dlt001_primary_focus_window_continuous = sizeof(dlt001_primary_focus_window_continuous);
-
-/****************************************************************
-primary focus window auto
-****************************************************************/
-const struct reg_entry dlt001_primary_focus_window_auto[] = {
-	{0x4C4C, 0xC604, REG_BITS_16},
-	{0x4C4E, 0x5D03, REG_BITS_16},
-	{0x4C50, 0xE600, REG_BITS_16},
-	{0x4C52, 0xE600, REG_BITS_16},
-};
-
-int32_t sizeof_dlt001_primary_focus_window_auto = sizeof(dlt001_primary_focus_window_auto);
+int32_t sizeof_seix006_framerate_fixed = sizeof(seix006_framerate_fixed);
 
 /****************************************************************
 scene normal
 ****************************************************************/
-const struct reg_entry dlt001_scene_normal[] = {
+const struct reg_entry seix006_GEN_scene_normal[] = {
 	{0x6A01, 0x00, REG_BITS_8},
 	{0x6A02, 0x01, REG_BITS_8},
 	{0x6A03, 0x00, REG_BITS_8},
@@ -600,6 +778,621 @@ const struct reg_entry dlt001_scene_normal[] = {
 	{0x6A0A, 0x0B, REG_BITS_8},
 	{0x6A0B, 0x4E, REG_BITS_8},
 	{0x6A0C, 0x01, REG_BITS_8},
+	{0x6A0D, 0xD3, REG_BITS_8},
+	{0x6A0E, 0x01, REG_BITS_8},
+	{0x6A0F, 0x04, REG_BITS_8},
+	{0x6A10, 0x00, REG_BITS_8},
+	{0x6A11, 0x00, REG_BITS_8},
+	{0x6A12, 0x00, REG_BITS_8},
+	{0x6A13, 0x00, REG_BITS_8},
+	{0x6A14, 0x00, REG_BITS_8},
+	{0x6A15, 0x00, REG_BITS_8},
+	{0x6A16, 0x00, REG_BITS_8},
+	{0x6A17, 0x00, REG_BITS_8},
+	{0x6A18, 0x00, REG_BITS_8},
+	{0x6A19, 0x00, REG_BITS_8},
+	{0x6A1A, 0x00, REG_BITS_8},
+	{0x6A1B, 0x00, REG_BITS_8},
+	{0x6A1C, 0x00, REG_BITS_8},
+	{0x6A1D, 0x00, REG_BITS_8},
+	{0x6A1E, 0x00, REG_BITS_8},
+	{0x6A1F, 0x00, REG_BITS_8},
+	{0x6A20, 0x00, REG_BITS_8},
+	{0x6A21, 0x00, REG_BITS_8},
+	{0x6A22, 0x00, REG_BITS_8},
+	{0x6A23, 0x00, REG_BITS_8},
+	{0x6A24, 0x00, REG_BITS_8},
+	{0x6A25, 0x00, REG_BITS_8},
+	{0x6A26, 0x00, REG_BITS_8},
+	{0x6A27, 0x00, REG_BITS_8},
+	{0x6A28, 0x00, REG_BITS_8},
+	{0x6A29, 0x00, REG_BITS_8},
+	{0x6A2A, 0x00, REG_BITS_8},
+	{0x6A2B, 0x00, REG_BITS_8},
+	{0x6A2C, 0x00, REG_BITS_8},
+	{0x6A2D, 0x00, REG_BITS_8},
+	{0x6A2E, 0x00, REG_BITS_8},
+	{0x6A2F, 0x00, REG_BITS_8},
+	{0x6A30, 0x00, REG_BITS_8},
+	{0x6A31, 0x16, REG_BITS_8},
+	{0x6A32, 0x40, REG_BITS_8},
+	{0x6A33, 0xC6, REG_BITS_8},
+	{0x6A34, 0x29, REG_BITS_8},
+	{0x6A35, 0x18, REG_BITS_8},
+	{0x6A36, 0x40, REG_BITS_8},
+	{0x6A37, 0x97, REG_BITS_8},
+	{0x6A38, 0x03, REG_BITS_8},
+	{0x6A39, 0x1A, REG_BITS_8},
+	{0x6A3A, 0x40, REG_BITS_8},
+	{0x6A3B, 0x40, REG_BITS_8},
+	{0x6A3C, 0x05, REG_BITS_8},
+	{0x6A3D, 0x1C, REG_BITS_8},
+	{0x6A3E, 0x40, REG_BITS_8},
+	{0x6A3F, 0xFD, REG_BITS_8},
+	{0x6A40, 0x03, REG_BITS_8},
+	{0x6A41, 0x1E, REG_BITS_8},
+	{0x6A42, 0x40, REG_BITS_8},
+	{0x6A43, 0x5F, REG_BITS_8},
+	{0x6A44, 0x02, REG_BITS_8},
+	{0x6A45, 0x20, REG_BITS_8},
+	{0x6A46, 0x40, REG_BITS_8},
+	{0x6A47, 0xCB, REG_BITS_8},
+	{0x6A48, 0x02, REG_BITS_8},
+	{0x6A49, 0xAE, REG_BITS_8},
+	{0x6A4A, 0x52, REG_BITS_8},
+	{0x6A4B, 0x00, REG_BITS_8},
+	{0x6A4C, 0x21, REG_BITS_8},
+	{0x6A4D, 0x88, REG_BITS_8},
+	{0x6A4E, 0x58, REG_BITS_8},
+	{0x6A4F, 0x24, REG_BITS_8},
+	{0x6A50, 0x00, REG_BITS_8},
+	{0x6A51, 0x8A, REG_BITS_8},
+	{0x6A52, 0x58, REG_BITS_8},
+	{0x6A53, 0x0B, REG_BITS_8},
+	{0x6A54, 0x00, REG_BITS_8},
+	{0x6A55, 0x8C, REG_BITS_8},
+	{0x6A56, 0x58, REG_BITS_8},
+	{0x6A57, 0x0A, REG_BITS_8},
+	{0x6A58, 0x00, REG_BITS_8},
+	{0x6A59, 0x5E, REG_BITS_8},
+	{0x6A5A, 0x4E, REG_BITS_8},
+	{0x6A5B, 0x00, REG_BITS_8},
+	{0x6A5C, 0x00, REG_BITS_8},
+	{0x6A5D, 0x80, REG_BITS_8},
+	{0x6A5E, 0x4E, REG_BITS_8},
+	{0x6A5F, 0x00, REG_BITS_8},
+	{0x6A60, 0x00, REG_BITS_8},
+	{0x6A61, 0x00, REG_BITS_8},
+	{0x6A62, 0x00, REG_BITS_8},
+	{0x6A63, 0x00, REG_BITS_8},
+	{0x6A64, 0x00, REG_BITS_8},
+	{0x6A65, 0x00, REG_BITS_8},
+	{0x6A66, 0x00, REG_BITS_8},
+	{0x6A67, 0x00, REG_BITS_8},
+	{0x6A68, 0x00, REG_BITS_8},
+	{0x6A69, 0x00, REG_BITS_8},
+	{0x6A6A, 0x00, REG_BITS_8},
+	{0x6A6B, 0x00, REG_BITS_8},
+	{0x6A6C, 0x00, REG_BITS_8},
+	{0x6A6D, 0x00, REG_BITS_8},
+	{0x6A6E, 0x00, REG_BITS_8},
+	{0x6A6F, 0x00, REG_BITS_8},
+	{0x6A70, 0x00, REG_BITS_8},
+	{0x6A00, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_GEN_scene_normal =
+    sizeof(seix006_GEN_scene_normal);
+
+
+/****************************************************************
+scene macro
+****************************************************************/
+const struct reg_entry seix006_GEN_scene_macro[] = {
+	{0x6A01, 0x00, REG_BITS_8},
+	{0x6A02, 0x01, REG_BITS_8},
+	{0x6A03, 0x00, REG_BITS_8},
+	{0x6A04, 0x62, REG_BITS_8},
+	{0x6A05, 0x00, REG_BITS_8},
+	{0x6A06, 0x20, REG_BITS_8},
+	{0x6A07, 0x5D, REG_BITS_8},
+	{0x6A08, 0x4E, REG_BITS_8},
+	{0x6A09, 0x00, REG_BITS_8},
+	{0x6A0A, 0x0B, REG_BITS_8},
+	{0x6A0B, 0x4E, REG_BITS_8},
+	{0x6A0C, 0x01, REG_BITS_8},
+	{0x6A0D, 0xD3, REG_BITS_8},
+	{0x6A0E, 0x01, REG_BITS_8},
+	{0x6A0F, 0x00, REG_BITS_8},
+	{0x6A10, 0x00, REG_BITS_8},
+	{0x6A11, 0x00, REG_BITS_8},
+	{0x6A12, 0x00, REG_BITS_8},
+	{0x6A13, 0x00, REG_BITS_8},
+	{0x6A14, 0x00, REG_BITS_8},
+	{0x6A15, 0x00, REG_BITS_8},
+	{0x6A16, 0x00, REG_BITS_8},
+	{0x6A17, 0x00, REG_BITS_8},
+	{0x6A18, 0x00, REG_BITS_8},
+	{0x6A19, 0x00, REG_BITS_8},
+	{0x6A1A, 0x00, REG_BITS_8},
+	{0x6A1B, 0x00, REG_BITS_8},
+	{0x6A1C, 0x00, REG_BITS_8},
+	{0x6A1D, 0x00, REG_BITS_8},
+	{0x6A1E, 0x00, REG_BITS_8},
+	{0x6A1F, 0x00, REG_BITS_8},
+	{0x6A20, 0x00, REG_BITS_8},
+	{0x6A21, 0x00, REG_BITS_8},
+	{0x6A22, 0x00, REG_BITS_8},
+	{0x6A23, 0x00, REG_BITS_8},
+	{0x6A24, 0x00, REG_BITS_8},
+	{0x6A25, 0x00, REG_BITS_8},
+	{0x6A26, 0x00, REG_BITS_8},
+	{0x6A27, 0x00, REG_BITS_8},
+	{0x6A28, 0x00, REG_BITS_8},
+	{0x6A29, 0x00, REG_BITS_8},
+	{0x6A2A, 0x00, REG_BITS_8},
+	{0x6A2B, 0x00, REG_BITS_8},
+	{0x6A2C, 0x00, REG_BITS_8},
+	{0x6A2D, 0x00, REG_BITS_8},
+	{0x6A2E, 0x00, REG_BITS_8},
+	{0x6A2F, 0x00, REG_BITS_8},
+	{0x6A30, 0x00, REG_BITS_8},
+	{0x6A31, 0x16, REG_BITS_8},
+	{0x6A32, 0x40, REG_BITS_8},
+	{0x6A33, 0xC6, REG_BITS_8},
+	{0x6A34, 0x29, REG_BITS_8},
+	{0x6A35, 0x18, REG_BITS_8},
+	{0x6A36, 0x40, REG_BITS_8},
+	{0x6A37, 0x97, REG_BITS_8},
+	{0x6A38, 0x03, REG_BITS_8},
+	{0x6A39, 0x1A, REG_BITS_8},
+	{0x6A3A, 0x40, REG_BITS_8},
+	{0x6A3B, 0x40, REG_BITS_8},
+	{0x6A3C, 0x05, REG_BITS_8},
+	{0x6A3D, 0x1C, REG_BITS_8},
+	{0x6A3E, 0x40, REG_BITS_8},
+	{0x6A3F, 0xFD, REG_BITS_8},
+	{0x6A40, 0x03, REG_BITS_8},
+	{0x6A41, 0x1E, REG_BITS_8},
+	{0x6A42, 0x40, REG_BITS_8},
+	{0x6A43, 0x5F, REG_BITS_8},
+	{0x6A44, 0x02, REG_BITS_8},
+	{0x6A45, 0x20, REG_BITS_8},
+	{0x6A46, 0x40, REG_BITS_8},
+	{0x6A47, 0xCB, REG_BITS_8},
+	{0x6A48, 0x02, REG_BITS_8},
+	{0x6A49, 0xAE, REG_BITS_8},
+	{0x6A4A, 0x52, REG_BITS_8},
+	{0x6A4B, 0x00, REG_BITS_8},
+	{0x6A4C, 0x21, REG_BITS_8},
+	{0x6A4D, 0x88, REG_BITS_8},
+	{0x6A4E, 0x58, REG_BITS_8},
+	{0x6A4F, 0x24, REG_BITS_8},
+	{0x6A50, 0x00, REG_BITS_8},
+	{0x6A51, 0x8A, REG_BITS_8},
+	{0x6A52, 0x58, REG_BITS_8},
+	{0x6A53, 0x0B, REG_BITS_8},
+	{0x6A54, 0x00, REG_BITS_8},
+	{0x6A55, 0x8C, REG_BITS_8},
+	{0x6A56, 0x58, REG_BITS_8},
+	{0x6A57, 0x0A, REG_BITS_8},
+	{0x6A58, 0x00, REG_BITS_8},
+	{0x6A59, 0x5E, REG_BITS_8},
+	{0x6A5A, 0x4E, REG_BITS_8},
+	{0x6A5B, 0x00, REG_BITS_8},
+	{0x6A5C, 0x00, REG_BITS_8},
+	{0x6A5D, 0x80, REG_BITS_8},
+	{0x6A5E, 0x4E, REG_BITS_8},
+	{0x6A5F, 0x00, REG_BITS_8},
+	{0x6A60, 0x00, REG_BITS_8},
+	{0x6A61, 0x00, REG_BITS_8},
+	{0x6A62, 0x00, REG_BITS_8},
+	{0x6A63, 0x00, REG_BITS_8},
+	{0x6A64, 0x00, REG_BITS_8},
+	{0x6A65, 0x00, REG_BITS_8},
+	{0x6A66, 0x00, REG_BITS_8},
+	{0x6A67, 0x00, REG_BITS_8},
+	{0x6A68, 0x00, REG_BITS_8},
+	{0x6A69, 0x00, REG_BITS_8},
+	{0x6A6A, 0x00, REG_BITS_8},
+	{0x6A6B, 0x00, REG_BITS_8},
+	{0x6A6C, 0x00, REG_BITS_8},
+	{0x6A6D, 0x00, REG_BITS_8},
+	{0x6A6E, 0x00, REG_BITS_8},
+	{0x6A6F, 0x00, REG_BITS_8},
+	{0x6A70, 0x00, REG_BITS_8},
+	{0x6A00, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_GEN_scene_macro =
+    sizeof(seix006_GEN_scene_macro);
+
+
+
+/****************************************************************
+scene sports
+****************************************************************/
+const struct reg_entry seix006_GEN_scene_sports[] = {
+	{0x6A01, 0x00, REG_BITS_8},
+	{0x6A02, 0x01, REG_BITS_8},
+	{0x6A03, 0x04, REG_BITS_8},
+	{0x6A04, 0x62, REG_BITS_8},
+	{0x6A05, 0x00, REG_BITS_8},
+	{0x6A06, 0x20, REG_BITS_8},
+	{0x6A07, 0x5D, REG_BITS_8},
+	{0x6A08, 0x4E, REG_BITS_8},
+	{0x6A09, 0x00, REG_BITS_8},
+	{0x6A0A, 0x0B, REG_BITS_8},
+	{0x6A0B, 0x4E, REG_BITS_8},
+	{0x6A0C, 0x01, REG_BITS_8},
+	{0x6A0D, 0xD7, REG_BITS_8},
+	{0x6A0E, 0x01, REG_BITS_8},
+	{0x6A0F, 0x04, REG_BITS_8},
+	{0x6A10, 0x00, REG_BITS_8},
+	{0x6A11, 0x00, REG_BITS_8},
+	{0x6A12, 0x00, REG_BITS_8},
+	{0x6A13, 0x00, REG_BITS_8},
+	{0x6A14, 0x00, REG_BITS_8},
+	{0x6A15, 0x00, REG_BITS_8},
+	{0x6A16, 0x00, REG_BITS_8},
+	{0x6A17, 0x00, REG_BITS_8},
+	{0x6A18, 0x00, REG_BITS_8},
+	{0x6A19, 0x00, REG_BITS_8},
+	{0x6A1A, 0x00, REG_BITS_8},
+	{0x6A1B, 0x00, REG_BITS_8},
+	{0x6A1C, 0x00, REG_BITS_8},
+	{0x6A1D, 0x00, REG_BITS_8},
+	{0x6A1E, 0x00, REG_BITS_8},
+	{0x6A1F, 0x00, REG_BITS_8},
+	{0x6A20, 0x00, REG_BITS_8},
+	{0x6A21, 0x00, REG_BITS_8},
+	{0x6A22, 0x00, REG_BITS_8},
+	{0x6A23, 0x00, REG_BITS_8},
+	{0x6A24, 0x00, REG_BITS_8},
+	{0x6A25, 0x00, REG_BITS_8},
+	{0x6A26, 0x00, REG_BITS_8},
+	{0x6A27, 0x00, REG_BITS_8},
+	{0x6A28, 0x00, REG_BITS_8},
+	{0x6A29, 0x00, REG_BITS_8},
+	{0x6A2A, 0x00, REG_BITS_8},
+	{0x6A2B, 0x00, REG_BITS_8},
+	{0x6A2C, 0x00, REG_BITS_8},
+	{0x6A2D, 0x00, REG_BITS_8},
+	{0x6A2E, 0x00, REG_BITS_8},
+	{0x6A2F, 0x00, REG_BITS_8},
+	{0x6A30, 0x00, REG_BITS_8},
+	{0x6A31, 0x16, REG_BITS_8},
+	{0x6A32, 0x40, REG_BITS_8},
+	{0x6A33, 0x91, REG_BITS_8},
+	{0x6A34, 0x19, REG_BITS_8},
+	{0x6A35, 0x18, REG_BITS_8},
+	{0x6A36, 0x40, REG_BITS_8},
+	{0x6A37, 0x5E, REG_BITS_8},
+	{0x6A38, 0x0A, REG_BITS_8},
+	{0x6A39, 0x1A, REG_BITS_8},
+	{0x6A3A, 0x40, REG_BITS_8},
+	{0x6A3B, 0x3F, REG_BITS_8},
+	{0x6A3C, 0x0C, REG_BITS_8},
+	{0x6A3D, 0x1C, REG_BITS_8},
+	{0x6A3E, 0x40, REG_BITS_8},
+	{0x6A3F, 0x00, REG_BITS_8},
+	{0x6A40, 0x00, REG_BITS_8},
+	{0x6A41, 0x1E, REG_BITS_8},
+	{0x6A42, 0x40, REG_BITS_8},
+	{0x6A43, 0x00, REG_BITS_8},
+	{0x6A44, 0x00, REG_BITS_8},
+	{0x6A45, 0x20, REG_BITS_8},
+	{0x6A46, 0x40, REG_BITS_8},
+	{0x6A47, 0x00, REG_BITS_8},
+	{0x6A48, 0x00, REG_BITS_8},
+	{0x6A49, 0xAE, REG_BITS_8},
+	{0x6A4A, 0x52, REG_BITS_8},
+	{0x6A4B, 0x00, REG_BITS_8},
+	{0x6A4C, 0x21, REG_BITS_8},
+	{0x6A4D, 0x88, REG_BITS_8},
+	{0x6A4E, 0x58, REG_BITS_8},
+	{0x6A4F, 0x24, REG_BITS_8},
+	{0x6A50, 0x00, REG_BITS_8},
+	{0x6A51, 0x8A, REG_BITS_8},
+	{0x6A52, 0x58, REG_BITS_8},
+	{0x6A53, 0x0B, REG_BITS_8},
+	{0x6A54, 0x00, REG_BITS_8},
+	{0x6A55, 0x8C, REG_BITS_8},
+	{0x6A56, 0x58, REG_BITS_8},
+	{0x6A57, 0x0A, REG_BITS_8},
+	{0x6A58, 0x00, REG_BITS_8},
+	{0x6A59, 0x5E, REG_BITS_8},
+	{0x6A5A, 0x4E, REG_BITS_8},
+	{0x6A5B, 0x00, REG_BITS_8},
+	{0x6A5C, 0x00, REG_BITS_8},
+	{0x6A5D, 0x80, REG_BITS_8},
+	{0x6A5E, 0x4E, REG_BITS_8},
+	{0x6A5F, 0x00, REG_BITS_8},
+	{0x6A60, 0x00, REG_BITS_8},
+	{0x6A61, 0x00, REG_BITS_8},
+	{0x6A62, 0x00, REG_BITS_8},
+	{0x6A63, 0x00, REG_BITS_8},
+	{0x6A64, 0x00, REG_BITS_8},
+	{0x6A65, 0x00, REG_BITS_8},
+	{0x6A66, 0x00, REG_BITS_8},
+	{0x6A67, 0x00, REG_BITS_8},
+	{0x6A68, 0x00, REG_BITS_8},
+	{0x6A69, 0x00, REG_BITS_8},
+	{0x6A6A, 0x00, REG_BITS_8},
+	{0x6A6B, 0x00, REG_BITS_8},
+	{0x6A6C, 0x00, REG_BITS_8},
+	{0x6A6D, 0x00, REG_BITS_8},
+	{0x6A6E, 0x00, REG_BITS_8},
+	{0x6A6F, 0x00, REG_BITS_8},
+	{0x6A70, 0x00, REG_BITS_8},
+	{0x6A00, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_GEN_scene_sports =
+    sizeof(seix006_GEN_scene_sports);
+
+
+
+/****************************************************************
+scene twilight landscape
+****************************************************************/
+const struct reg_entry seix006_GEN_scene_twilight[] = {
+	{0x6A01, 0x00, REG_BITS_8},
+	{0x6A02, 0x01, REG_BITS_8},
+	{0x6A03, 0x05, REG_BITS_8},
+	{0x6A04, 0x62, REG_BITS_8},
+	{0x6A05, 0x00, REG_BITS_8},
+	{0x6A06, 0x20, REG_BITS_8},
+	{0x6A07, 0x5D, REG_BITS_8},
+	{0x6A08, 0x4E, REG_BITS_8},
+	{0x6A09, 0x00, REG_BITS_8},
+	{0x6A0A, 0x0B, REG_BITS_8},
+	{0x6A0B, 0x4E, REG_BITS_8},
+	{0x6A0C, 0x01, REG_BITS_8},
+	{0x6A0D, 0xD8, REG_BITS_8},
+	{0x6A0E, 0x01, REG_BITS_8},
+	{0x6A0F, 0x04, REG_BITS_8},
+	{0x6A10, 0x00, REG_BITS_8},
+	{0x6A11, 0x00, REG_BITS_8},
+	{0x6A12, 0x00, REG_BITS_8},
+	{0x6A13, 0x00, REG_BITS_8},
+	{0x6A14, 0x00, REG_BITS_8},
+	{0x6A15, 0x00, REG_BITS_8},
+	{0x6A16, 0x00, REG_BITS_8},
+	{0x6A17, 0x00, REG_BITS_8},
+	{0x6A18, 0x00, REG_BITS_8},
+	{0x6A19, 0x00, REG_BITS_8},
+	{0x6A1A, 0x00, REG_BITS_8},
+	{0x6A1B, 0x00, REG_BITS_8},
+	{0x6A1C, 0x00, REG_BITS_8},
+	{0x6A1D, 0x00, REG_BITS_8},
+	{0x6A1E, 0x00, REG_BITS_8},
+	{0x6A1F, 0x00, REG_BITS_8},
+	{0x6A20, 0x00, REG_BITS_8},
+	{0x6A21, 0x00, REG_BITS_8},
+	{0x6A22, 0x00, REG_BITS_8},
+	{0x6A23, 0x00, REG_BITS_8},
+	{0x6A24, 0x00, REG_BITS_8},
+	{0x6A25, 0x00, REG_BITS_8},
+	{0x6A26, 0x00, REG_BITS_8},
+	{0x6A27, 0x00, REG_BITS_8},
+	{0x6A28, 0x00, REG_BITS_8},
+	{0x6A29, 0x00, REG_BITS_8},
+	{0x6A2A, 0x00, REG_BITS_8},
+	{0x6A2B, 0x00, REG_BITS_8},
+	{0x6A2C, 0x00, REG_BITS_8},
+	{0x6A2D, 0x00, REG_BITS_8},
+	{0x6A2E, 0x00, REG_BITS_8},
+	{0x6A2F, 0x00, REG_BITS_8},
+	{0x6A30, 0x00, REG_BITS_8},
+	{0x6A31, 0x16, REG_BITS_8},
+	{0x6A32, 0x40, REG_BITS_8},
+	{0x6A33, 0xC7, REG_BITS_8},
+	{0x6A34, 0x29, REG_BITS_8},
+	{0x6A35, 0x18, REG_BITS_8},
+	{0x6A36, 0x40, REG_BITS_8},
+	{0x6A37, 0x97, REG_BITS_8},
+	{0x6A38, 0x03, REG_BITS_8},
+	{0x6A39, 0x1A, REG_BITS_8},
+	{0x6A3A, 0x40, REG_BITS_8},
+	{0x6A3B, 0x00, REG_BITS_8},
+	{0x6A3C, 0x00, REG_BITS_8},
+	{0x6A3D, 0x1C, REG_BITS_8},
+	{0x6A3E, 0x40, REG_BITS_8},
+	{0x6A3F, 0x00, REG_BITS_8},
+	{0x6A40, 0x00, REG_BITS_8},
+	{0x6A41, 0x1E, REG_BITS_8},
+	{0x6A42, 0x40, REG_BITS_8},
+	{0x6A43, 0xAB, REG_BITS_8},
+	{0x6A44, 0x0F, REG_BITS_8},
+	{0x6A45, 0x20, REG_BITS_8},
+	{0x6A46, 0x40, REG_BITS_8},
+	{0x6A47, 0xFD, REG_BITS_8},
+	{0x6A48, 0x03, REG_BITS_8},
+	{0x6A49, 0xAE, REG_BITS_8},
+	{0x6A4A, 0x52, REG_BITS_8},
+	{0x6A4B, 0x5C, REG_BITS_8},
+	{0x6A4C, 0x17, REG_BITS_8},
+	{0x6A4D, 0x88, REG_BITS_8},
+	{0x6A4E, 0x58, REG_BITS_8},
+	{0x6A4F, 0x24, REG_BITS_8},
+	{0x6A50, 0x00, REG_BITS_8},
+	{0x6A51, 0x8A, REG_BITS_8},
+	{0x6A52, 0x58, REG_BITS_8},
+	{0x6A53, 0x0B, REG_BITS_8},
+	{0x6A54, 0x00, REG_BITS_8},
+	{0x6A55, 0x8C, REG_BITS_8},
+	{0x6A56, 0x58, REG_BITS_8},
+	{0x6A57, 0x0A, REG_BITS_8},
+	{0x6A58, 0x00, REG_BITS_8},
+	{0x6A59, 0x5E, REG_BITS_8},
+	{0x6A5A, 0x4E, REG_BITS_8},
+	{0x6A5B, 0x00, REG_BITS_8},
+	{0x6A5C, 0x00, REG_BITS_8},
+	{0x6A5D, 0x80, REG_BITS_8},
+	{0x6A5E, 0x4E, REG_BITS_8},
+	{0x6A5F, 0x00, REG_BITS_8},
+	{0x6A60, 0x00, REG_BITS_8},
+	{0x6A61, 0x00, REG_BITS_8},
+	{0x6A62, 0x00, REG_BITS_8},
+	{0x6A63, 0x00, REG_BITS_8},
+	{0x6A64, 0x00, REG_BITS_8},
+	{0x6A65, 0x00, REG_BITS_8},
+	{0x6A66, 0x00, REG_BITS_8},
+	{0x6A67, 0x00, REG_BITS_8},
+	{0x6A68, 0x00, REG_BITS_8},
+	{0x6A69, 0x00, REG_BITS_8},
+	{0x6A6A, 0x00, REG_BITS_8},
+	{0x6A6B, 0x00, REG_BITS_8},
+	{0x6A6C, 0x00, REG_BITS_8},
+	{0x6A6D, 0x00, REG_BITS_8},
+	{0x6A6E, 0x00, REG_BITS_8},
+	{0x6A6F, 0x00, REG_BITS_8},
+	{0x6A70, 0x00, REG_BITS_8},
+	{0x6A00, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_GEN_scene_twilight =
+    sizeof(seix006_GEN_scene_twilight);
+
+/****************************************************************
+scene beach_and_snow
+****************************************************************/
+const struct reg_entry seix006_GEN_scene_beach_and_snow[] = {
+	{0x6A01, 0x00, REG_BITS_8},
+	{0x6A02, 0x01, REG_BITS_8},
+	{0x6A03, 0x03, REG_BITS_8},
+	{0x6A04, 0x62, REG_BITS_8},
+	{0x6A05, 0x00, REG_BITS_8},
+	{0x6A06, 0x20, REG_BITS_8},
+	{0x6A07, 0x5D, REG_BITS_8},
+	{0x6A08, 0x4E, REG_BITS_8},
+	{0x6A09, 0x00, REG_BITS_8},
+	{0x6A0A, 0x0B, REG_BITS_8},
+	{0x6A0B, 0x4E, REG_BITS_8},
+	{0x6A0C, 0x02, REG_BITS_8},
+	{0x6A0D, 0x00, REG_BITS_8},
+	{0x6A0E, 0x00, REG_BITS_8},
+	{0x6A0F, 0x00, REG_BITS_8},
+	{0x6A10, 0x00, REG_BITS_8},
+	{0x6A11, 0x00, REG_BITS_8},
+	{0x6A12, 0x00, REG_BITS_8},
+	{0x6A13, 0x00, REG_BITS_8},
+	{0x6A14, 0x00, REG_BITS_8},
+	{0x6A15, 0x00, REG_BITS_8},
+	{0x6A16, 0x00, REG_BITS_8},
+	{0x6A17, 0x00, REG_BITS_8},
+	{0x6A18, 0x00, REG_BITS_8},
+	{0x6A19, 0x00, REG_BITS_8},
+	{0x6A1A, 0x00, REG_BITS_8},
+	{0x6A1B, 0x00, REG_BITS_8},
+	{0x6A1C, 0x00, REG_BITS_8},
+	{0x6A1D, 0x00, REG_BITS_8},
+	{0x6A1E, 0x00, REG_BITS_8},
+	{0x6A1F, 0x00, REG_BITS_8},
+	{0x6A20, 0x00, REG_BITS_8},
+	{0x6A21, 0x00, REG_BITS_8},
+	{0x6A22, 0x00, REG_BITS_8},
+	{0x6A23, 0x00, REG_BITS_8},
+	{0x6A24, 0x00, REG_BITS_8},
+	{0x6A25, 0x00, REG_BITS_8},
+	{0x6A26, 0x00, REG_BITS_8},
+	{0x6A27, 0x00, REG_BITS_8},
+	{0x6A28, 0x00, REG_BITS_8},
+	{0x6A29, 0x00, REG_BITS_8},
+	{0x6A2A, 0x00, REG_BITS_8},
+	{0x6A2B, 0x00, REG_BITS_8},
+	{0x6A2C, 0x00, REG_BITS_8},
+	{0x6A2D, 0x00, REG_BITS_8},
+	{0x6A2E, 0x00, REG_BITS_8},
+	{0x6A2F, 0x00, REG_BITS_8},
+	{0x6A30, 0x00, REG_BITS_8},
+	{0x6A31, 0x16, REG_BITS_8},
+	{0x6A32, 0x40, REG_BITS_8},
+	{0x6A33, 0xC6, REG_BITS_8},
+	{0x6A34, 0x29, REG_BITS_8},
+	{0x6A35, 0x18, REG_BITS_8},
+	{0x6A36, 0x40, REG_BITS_8},
+	{0x6A37, 0x97, REG_BITS_8},
+	{0x6A38, 0x03, REG_BITS_8},
+	{0x6A39, 0x1A, REG_BITS_8},
+	{0x6A3A, 0x40, REG_BITS_8},
+	{0x6A3B, 0x40, REG_BITS_8},
+	{0x6A3C, 0x05, REG_BITS_8},
+	{0x6A3D, 0x1C, REG_BITS_8},
+	{0x6A3E, 0x40, REG_BITS_8},
+	{0x6A3F, 0xFD, REG_BITS_8},
+	{0x6A40, 0x03, REG_BITS_8},
+	{0x6A41, 0x1E, REG_BITS_8},
+	{0x6A42, 0x40, REG_BITS_8},
+	{0x6A43, 0x5F, REG_BITS_8},
+	{0x6A44, 0x02, REG_BITS_8},
+	{0x6A45, 0x20, REG_BITS_8},
+	{0x6A46, 0x40, REG_BITS_8},
+	{0x6A47, 0xCB, REG_BITS_8},
+	{0x6A48, 0x02, REG_BITS_8},
+	{0x6A49, 0xAE, REG_BITS_8},
+	{0x6A4A, 0x52, REG_BITS_8},
+	{0x6A4B, 0x9D, REG_BITS_8},
+	{0x6A4C, 0x2E, REG_BITS_8},
+	{0x6A4D, 0x88, REG_BITS_8},
+	{0x6A4E, 0x58, REG_BITS_8},
+	{0x6A4F, 0x24, REG_BITS_8},
+	{0x6A50, 0x00, REG_BITS_8},
+	{0x6A51, 0x8A, REG_BITS_8},
+	{0x6A52, 0x58, REG_BITS_8},
+	{0x6A53, 0x0B, REG_BITS_8},
+	{0x6A54, 0x00, REG_BITS_8},
+	{0x6A55, 0x8C, REG_BITS_8},
+	{0x6A56, 0x58, REG_BITS_8},
+	{0x6A57, 0x0A, REG_BITS_8},
+	{0x6A58, 0x00, REG_BITS_8},
+	{0x6A59, 0x5E, REG_BITS_8},
+	{0x6A5A, 0x4E, REG_BITS_8},
+	{0x6A5B, 0x00, REG_BITS_8},
+	{0x6A5C, 0x00, REG_BITS_8},
+	{0x6A5D, 0x80, REG_BITS_8},
+	{0x6A5E, 0x4E, REG_BITS_8},
+	{0x6A5F, 0x00, REG_BITS_8},
+	{0x6A60, 0x00, REG_BITS_8},
+	{0x6A61, 0x00, REG_BITS_8},
+	{0x6A62, 0x00, REG_BITS_8},
+	{0x6A63, 0x00, REG_BITS_8},
+	{0x6A64, 0x00, REG_BITS_8},
+	{0x6A65, 0x00, REG_BITS_8},
+	{0x6A66, 0x00, REG_BITS_8},
+	{0x6A67, 0x00, REG_BITS_8},
+	{0x6A68, 0x00, REG_BITS_8},
+	{0x6A69, 0x00, REG_BITS_8},
+	{0x6A6A, 0x00, REG_BITS_8},
+	{0x6A6B, 0x00, REG_BITS_8},
+	{0x6A6C, 0x00, REG_BITS_8},
+	{0x6A6D, 0x00, REG_BITS_8},
+	{0x6A6E, 0x00, REG_BITS_8},
+	{0x6A6F, 0x00, REG_BITS_8},
+	{0x6A70, 0x00, REG_BITS_8},
+	{0x6A00, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_GEN_scene_beach_and_snow =
+    sizeof(seix006_GEN_scene_beach_and_snow);
+
+/****************************************************************
+scene landscape
+****************************************************************/
+const struct reg_entry seix006_GEN_scene_landscape[] = {	
+	{0x6A01, 0x00, REG_BITS_8},
+	{0x6A02, 0x01, REG_BITS_8},
+	{0x6A03, 0x01, REG_BITS_8},
+	{0x6A04, 0x62, REG_BITS_8},
+	{0x6A05, 0x00, REG_BITS_8},
+	{0x6A06, 0x20, REG_BITS_8},
+	{0x6A07, 0x5D, REG_BITS_8},
+	{0x6A08, 0x4E, REG_BITS_8},
+	{0x6A09, 0x00, REG_BITS_8},
+	{0x6A0A, 0x0B, REG_BITS_8},
+	{0x6A0B, 0x4E, REG_BITS_8},
+	{0x6A0C, 0x02, REG_BITS_8},
 	{0x6A0D, 0x00, REG_BITS_8},
 	{0x6A0E, 0x00, REG_BITS_8},
 	{0x6A0F, 0x00, REG_BITS_8},
@@ -703,18 +1496,19 @@ const struct reg_entry dlt001_scene_normal[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_scene_normal = sizeof(dlt001_scene_normal);
+int32_t sizeof_seix006_GEN_scene_landscape =
+    sizeof(seix006_GEN_scene_landscape);
 
 /****************************************************************
-scene sports
+scene portrait
 ****************************************************************/
-const struct reg_entry dlt001_scene_sports[] = {
+const struct reg_entry seix006_GEN_scene_portrait[] = {	
 	{0x6A01, 0x00, REG_BITS_8},
 	{0x6A02, 0x01, REG_BITS_8},
-	{0x6A03, 0x04, REG_BITS_8},
+	{0x6A03, 0x02, REG_BITS_8},
 	{0x6A04, 0x62, REG_BITS_8},
 	{0x6A05, 0x00, REG_BITS_8},
-	{0x6A06, 0x20, REG_BITS_8},
+	{0x6A06, 0x0D, REG_BITS_8},
 	{0x6A07, 0x5D, REG_BITS_8},
 	{0x6A08, 0x4E, REG_BITS_8},
 	{0x6A09, 0x00, REG_BITS_8},
@@ -759,28 +1553,28 @@ const struct reg_entry dlt001_scene_sports[] = {
 	{0x6A30, 0x00, REG_BITS_8},
 	{0x6A31, 0x16, REG_BITS_8},
 	{0x6A32, 0x40, REG_BITS_8},
-	{0x6A33, 0x91, REG_BITS_8},
-	{0x6A34, 0x19, REG_BITS_8},
+	{0x6A33, 0xC6, REG_BITS_8},
+	{0x6A34, 0x29, REG_BITS_8},
 	{0x6A35, 0x18, REG_BITS_8},
 	{0x6A36, 0x40, REG_BITS_8},
-	{0x6A37, 0x5E, REG_BITS_8},
-	{0x6A38, 0x0A, REG_BITS_8},
+	{0x6A37, 0x97, REG_BITS_8},
+	{0x6A38, 0x03, REG_BITS_8},
 	{0x6A39, 0x1A, REG_BITS_8},
 	{0x6A3A, 0x40, REG_BITS_8},
-	{0x6A3B, 0x3F, REG_BITS_8},
-	{0x6A3C, 0x0C, REG_BITS_8},
+	{0x6A3B, 0x40, REG_BITS_8},
+	{0x6A3C, 0x05, REG_BITS_8},
 	{0x6A3D, 0x1C, REG_BITS_8},
 	{0x6A3E, 0x40, REG_BITS_8},
-	{0x6A3F, 0x00, REG_BITS_8},
-	{0x6A40, 0x00, REG_BITS_8},
+	{0x6A3F, 0xFD, REG_BITS_8},
+	{0x6A40, 0x03, REG_BITS_8},
 	{0x6A41, 0x1E, REG_BITS_8},
 	{0x6A42, 0x40, REG_BITS_8},
-	{0x6A43, 0x00, REG_BITS_8},
-	{0x6A44, 0x00, REG_BITS_8},
+	{0x6A43, 0x5F, REG_BITS_8},
+	{0x6A44, 0x02, REG_BITS_8},
 	{0x6A45, 0x20, REG_BITS_8},
 	{0x6A46, 0x40, REG_BITS_8},
-	{0x6A47, 0x00, REG_BITS_8},
-	{0x6A48, 0x00, REG_BITS_8},
+	{0x6A47, 0xCB, REG_BITS_8},
+	{0x6A48, 0x02, REG_BITS_8},
 	{0x6A49, 0xAE, REG_BITS_8},
 	{0x6A4A, 0x52, REG_BITS_8},
 	{0x6A4B, 0x00, REG_BITS_8},
@@ -799,8 +1593,8 @@ const struct reg_entry dlt001_scene_sports[] = {
 	{0x6A58, 0x00, REG_BITS_8},
 	{0x6A59, 0x5E, REG_BITS_8},
 	{0x6A5A, 0x4E, REG_BITS_8},
-	{0x6A5B, 0x00, REG_BITS_8},
-	{0x6A5C, 0x00, REG_BITS_8},
+	{0x6A5B, 0x20, REG_BITS_8},
+	{0x6A5C, 0x03, REG_BITS_8},
 	{0x6A5D, 0x80, REG_BITS_8},
 	{0x6A5E, 0x4E, REG_BITS_8},
 	{0x6A5F, 0x00, REG_BITS_8},
@@ -824,18 +1618,19 @@ const struct reg_entry dlt001_scene_sports[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_scene_sports = sizeof(dlt001_scene_sports);
+int32_t sizeof_seix006_GEN_scene_portrait =
+    sizeof(seix006_GEN_scene_portrait);
 
 /****************************************************************
-scene twilight landscape
+scene twilight_portrait
 ****************************************************************/
-const struct reg_entry dlt001_scene_twilight[] = {
+const struct reg_entry seix006_GEN_scene_twilight_portrait[] = {	
 	{0x6A01, 0x00, REG_BITS_8},
 	{0x6A02, 0x01, REG_BITS_8},
-	{0x6A03, 0x05, REG_BITS_8},
+	{0x6A03, 0x07, REG_BITS_8},
 	{0x6A04, 0x62, REG_BITS_8},
 	{0x6A05, 0x00, REG_BITS_8},
-	{0x6A06, 0x20, REG_BITS_8},
+	{0x6A06, 0x0D, REG_BITS_8},
 	{0x6A07, 0x5D, REG_BITS_8},
 	{0x6A08, 0x4E, REG_BITS_8},
 	{0x6A09, 0x00, REG_BITS_8},
@@ -920,6 +1715,128 @@ const struct reg_entry dlt001_scene_twilight[] = {
 	{0x6A58, 0x00, REG_BITS_8},
 	{0x6A59, 0x5E, REG_BITS_8},
 	{0x6A5A, 0x4E, REG_BITS_8},
+	{0x6A5B, 0x20, REG_BITS_8},
+	{0x6A5C, 0x03, REG_BITS_8},
+	{0x6A5D, 0x80, REG_BITS_8},
+	{0x6A5E, 0x4E, REG_BITS_8},
+	{0x6A5F, 0x00, REG_BITS_8},
+	{0x6A60, 0x00, REG_BITS_8},
+	{0x6A61, 0x00, REG_BITS_8},
+	{0x6A62, 0x00, REG_BITS_8},
+	{0x6A63, 0x00, REG_BITS_8},
+	{0x6A64, 0x00, REG_BITS_8},
+	{0x6A65, 0x00, REG_BITS_8},
+	{0x6A66, 0x00, REG_BITS_8},
+	{0x6A67, 0x00, REG_BITS_8},
+	{0x6A68, 0x00, REG_BITS_8},
+	{0x6A69, 0x00, REG_BITS_8},
+	{0x6A6A, 0x00, REG_BITS_8},
+	{0x6A6B, 0x00, REG_BITS_8},
+	{0x6A6C, 0x00, REG_BITS_8},
+	{0x6A6D, 0x00, REG_BITS_8},
+	{0x6A6E, 0x00, REG_BITS_8},
+	{0x6A6F, 0x00, REG_BITS_8},
+	{0x6A70, 0x00, REG_BITS_8},
+	{0x6A00, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_GEN_scene_twilight_portrait =
+    sizeof(seix006_GEN_scene_twilight_portrait);
+    
+/****************************************************************
+scene document
+****************************************************************/
+const struct reg_entry seix006_GEN_scene_document[] = {		
+	{0x6A01, 0x00, REG_BITS_8},
+	{0x6A02, 0x01, REG_BITS_8},
+	{0x6A03, 0x06, REG_BITS_8},
+	{0x6A04, 0x62, REG_BITS_8},
+	{0x6A05, 0x00, REG_BITS_8},
+	{0x6A06, 0x30, REG_BITS_8},
+	{0x6A07, 0x5D, REG_BITS_8},
+	{0x6A08, 0x4E, REG_BITS_8},
+	{0x6A09, 0x00, REG_BITS_8},
+	{0x6A0A, 0x0B, REG_BITS_8},
+	{0x6A0B, 0x4E, REG_BITS_8},
+	{0x6A0C, 0x01, REG_BITS_8},
+	{0x6A0D, 0x00, REG_BITS_8},
+	{0x6A0E, 0x00, REG_BITS_8},
+	{0x6A0F, 0x00, REG_BITS_8},
+	{0x6A10, 0x00, REG_BITS_8},
+	{0x6A11, 0x00, REG_BITS_8},
+	{0x6A12, 0x00, REG_BITS_8},
+	{0x6A13, 0x00, REG_BITS_8},
+	{0x6A14, 0x00, REG_BITS_8},
+	{0x6A15, 0x00, REG_BITS_8},
+	{0x6A16, 0x00, REG_BITS_8},
+	{0x6A17, 0x00, REG_BITS_8},
+	{0x6A18, 0x00, REG_BITS_8},
+	{0x6A19, 0x00, REG_BITS_8},
+	{0x6A1A, 0x00, REG_BITS_8},
+	{0x6A1B, 0x00, REG_BITS_8},
+	{0x6A1C, 0x00, REG_BITS_8},
+	{0x6A1D, 0x00, REG_BITS_8},
+	{0x6A1E, 0x00, REG_BITS_8},
+	{0x6A1F, 0x00, REG_BITS_8},
+	{0x6A20, 0x00, REG_BITS_8},
+	{0x6A21, 0x00, REG_BITS_8},
+	{0x6A22, 0x00, REG_BITS_8},
+	{0x6A23, 0x00, REG_BITS_8},
+	{0x6A24, 0x00, REG_BITS_8},
+	{0x6A25, 0x00, REG_BITS_8},
+	{0x6A26, 0x00, REG_BITS_8},
+	{0x6A27, 0x00, REG_BITS_8},
+	{0x6A28, 0x00, REG_BITS_8},
+	{0x6A29, 0x00, REG_BITS_8},
+	{0x6A2A, 0x00, REG_BITS_8},
+	{0x6A2B, 0x00, REG_BITS_8},
+	{0x6A2C, 0x00, REG_BITS_8},
+	{0x6A2D, 0x00, REG_BITS_8},
+	{0x6A2E, 0x00, REG_BITS_8},
+	{0x6A2F, 0x00, REG_BITS_8},
+	{0x6A30, 0x00, REG_BITS_8},
+	{0x6A31, 0x16, REG_BITS_8},
+	{0x6A32, 0x40, REG_BITS_8},
+	{0x6A33, 0x97, REG_BITS_8},
+	{0x6A34, 0x25, REG_BITS_8},
+	{0x6A35, 0x18, REG_BITS_8},
+	{0x6A36, 0x40, REG_BITS_8},
+	{0x6A37, 0x97, REG_BITS_8},
+	{0x6A38, 0x03, REG_BITS_8},
+	{0x6A39, 0x1A, REG_BITS_8},
+	{0x6A3A, 0x40, REG_BITS_8},
+	{0x6A3B, 0x2D, REG_BITS_8},
+	{0x6A3C, 0x04, REG_BITS_8},
+	{0x6A3D, 0x1C, REG_BITS_8},
+	{0x6A3E, 0x40, REG_BITS_8},
+	{0x6A3F, 0xFD, REG_BITS_8},
+	{0x6A40, 0x03, REG_BITS_8},
+	{0x6A41, 0x1E, REG_BITS_8},
+	{0x6A42, 0x40, REG_BITS_8},
+	{0x6A43, 0x00, REG_BITS_8},
+	{0x6A44, 0x04, REG_BITS_8},
+	{0x6A45, 0x20, REG_BITS_8},
+	{0x6A46, 0x40, REG_BITS_8},
+	{0x6A47, 0xC8, REG_BITS_8},
+	{0x6A48, 0x06, REG_BITS_8},
+	{0x6A49, 0xAE, REG_BITS_8},
+	{0x6A4A, 0x52, REG_BITS_8},
+	{0x6A4B, 0x00, REG_BITS_8},
+	{0x6A4C, 0x21, REG_BITS_8},
+	{0x6A4D, 0x88, REG_BITS_8},
+	{0x6A4E, 0x58, REG_BITS_8},
+	{0x6A4F, 0x25, REG_BITS_8},
+	{0x6A50, 0x00, REG_BITS_8},
+	{0x6A51, 0x8A, REG_BITS_8},
+	{0x6A52, 0x58, REG_BITS_8},
+	{0x6A53, 0x10, REG_BITS_8},
+	{0x6A54, 0x00, REG_BITS_8},
+	{0x6A55, 0x8C, REG_BITS_8},
+	{0x6A56, 0x58, REG_BITS_8},
+	{0x6A57, 0x10, REG_BITS_8},
+	{0x6A58, 0x00, REG_BITS_8},
+	{0x6A59, 0x5E, REG_BITS_8},
+	{0x6A5A, 0x4E, REG_BITS_8},
 	{0x6A5B, 0x00, REG_BITS_8},
 	{0x6A5C, 0x00, REG_BITS_8},
 	{0x6A5D, 0x80, REG_BITS_8},
@@ -945,21 +1862,22 @@ const struct reg_entry dlt001_scene_twilight[] = {
 	{0x6A00, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_scene_twilight = sizeof(dlt001_scene_twilight);
-
-const struct reg_entry dlt001_INTCLR[] = {
+int32_t sizeof_seix006_GEN_scene_document =
+    sizeof(seix006_GEN_scene_document);
+                
+const struct reg_entry seix006_INTCLR[] = {
 	{0x00FC, 0x1F, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_INTCLR = sizeof(dlt001_INTCLR);
+int32_t sizeof_seix006_INTCLR = sizeof(seix006_INTCLR);
 
-const struct reg_entry dlt001_MONI_REFRESH_F[] = {
+const struct reg_entry seix006_MONI_REFRESH_F[] = {
 	{0x0012, 0x01, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_MONI_REFRESH_F = sizeof(dlt001_MONI_REFRESH_F);
+int32_t sizeof_seix006_MONI_REFRESH_F = sizeof(seix006_MONI_REFRESH_F);
 
-const struct reg_entry dlt001_GEN_period_1_ES1[] = {
+const struct reg_entry seix006_GEN_period_1_ES1[] = {
 	{0x0009, 0x15, REG_BITS_8},
 	{0x0007, 0x00, REG_BITS_8},
 	{0x000B, 0x00, REG_BITS_8},
@@ -968,7 +1886,7 @@ const struct reg_entry dlt001_GEN_period_1_ES1[] = {
 	{0x001E, 0x00, REG_BITS_8},
 	{0x001F, 0x00, REG_BITS_8},
 	{0x0021, 0x00, REG_BITS_8},
-	{0x0022, 0x8002, REG_BITS_16},
+	{0x0022, 0x8002, REG_BITS_16}, /* 640 */
 	{0x0024, 0x200A, REG_BITS_16},
 	{0x0026, 0x8002, REG_BITS_16},
 	{0x0028, 0xE001, REG_BITS_16},
@@ -1136,18 +2054,29 @@ const struct reg_entry dlt001_GEN_period_1_ES1[] = {
 	{0xB1F4, 0xC4411800, REG_BITS_32},
 	{0xB1F8, 0x28421800, REG_BITS_32},
 	{0xB1FC, 0x50401800, REG_BITS_32},
+	/* white balance auto */
+	{0x0102, 0x20, REG_BITS_8},
+	{0x0107, 0x10, REG_BITS_8},
+	{0x010C, 0x20, REG_BITS_8},
+	{0x0111, 0x10, REG_BITS_8},
+	{0x0116, 0x20, REG_BITS_8},
+	{0x011B, 0x20, REG_BITS_8},
+	{0x0120, 0x20, REG_BITS_8},
+	{0x0125, 0x20, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_GEN_period_1_ES1 = sizeof(dlt001_GEN_period_1_ES1);
+int32_t sizeof_seix006_GEN_period_1_ES1 = sizeof(seix006_GEN_period_1_ES1);
 
-const struct reg_entry dlt001_GEN_period_1_ES2[] = {
+const struct reg_entry seix006_GEN_period_1_ES2[] = {
 	{0x000B, 0x00, REG_BITS_8},
-	{0x0022, 0x8002, REG_BITS_16},
+	{0x0022, 0x8002, REG_BITS_16}, /* 640 */
 	{0x0028, 0xE001, REG_BITS_16},
-	{0x0207, 0x50, REG_BITS_8},
+	{0x0205, 0x46, REG_BITS_8}, /* Quality 70 */
+	{0x0206, 0x4B, REG_BITS_8}, /* Quality 75 */
+	{0x0207, 0x50, REG_BITS_8}, /* Quality 80 */
 	{0x0038, 0x0C, REG_BITS_8},
-	{0x02CD, 0xAA, REG_BITS_8},
-	{0x0026, 0x8002, REG_BITS_16},
+	{0x02CD, 0xA8, REG_BITS_8}, /* Different power setting for Zeus */
+	{0x0026, 0x8002, REG_BITS_16}, /* 640 */
 	{0x002C, 0xE001, REG_BITS_16},
 	{0x00FA, 0x1F, REG_BITS_8},
 	{0x02B9, 0x10, REG_BITS_8},
@@ -1180,11 +2109,20 @@ const struct reg_entry dlt001_GEN_period_1_ES2[] = {
 	{0x473E, 0x16, REG_BITS_8},
 	{0x473F, 0x14, REG_BITS_8},
 	{0x0009, 0x15, REG_BITS_8},
+	/* white balance auto */
+	{0x0102, 0x20, REG_BITS_8},
+	{0x0107, 0x10, REG_BITS_8},
+	{0x010C, 0x20, REG_BITS_8},
+	{0x0111, 0x10, REG_BITS_8},
+	{0x0116, 0x20, REG_BITS_8},
+	{0x011B, 0x20, REG_BITS_8},
+	{0x0120, 0x20, REG_BITS_8},
+	{0x0125, 0x20, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_GEN_period_1_ES2 = sizeof(dlt001_GEN_period_1_ES2);
+int32_t sizeof_seix006_GEN_period_1_ES2 = sizeof(seix006_GEN_period_1_ES2);
 
-const struct reg_entry dlt001_vendor_1_period_2_ES1[] = {
+const struct reg_entry seix006_vendor_1_period_2_ES1[] = {
 	{0x4A00, 0x1001, REG_BITS_16},
 	{0x4A02, 0x0000, REG_BITS_16},
 	{0x4A04, 0x8611, REG_BITS_16},
@@ -3233,10 +4171,10 @@ const struct reg_entry dlt001_vendor_1_period_2_ES1[] = {
 	{0x02D7, 0x10, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_1_period_2_ES1 =
-    sizeof(dlt001_vendor_1_period_2_ES1);
+int32_t sizeof_seix006_vendor_1_period_2_ES1 =
+    sizeof(seix006_vendor_1_period_2_ES1);
 
-const struct reg_entry dlt001_vendor_1_period_2_ES2[] = {
+const struct reg_entry seix006_vendor_1_period_2_ES2[] = {
 	{0x0105, 0x80, REG_BITS_8},
 	{0x0387, 0x01, REG_BITS_8},
 	{0x4A24, 0x1200, REG_BITS_16},
@@ -3449,10 +4387,10 @@ const struct reg_entry dlt001_vendor_1_period_2_ES2[] = {
 	{0x0105, 0x40, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_1_period_2_ES2 =
-    sizeof(dlt001_vendor_1_period_2_ES2);
+int32_t sizeof_seix006_vendor_1_period_2_ES2 =
+    sizeof(seix006_vendor_1_period_2_ES2);
 
-const struct reg_entry dlt001_vendor_0_period_2_ES1[] = {
+const struct reg_entry seix006_vendor_0_period_2_ES1[] = {
 	{0x4A00, 0x1001, REG_BITS_16},
 	{0x4A02, 0x0000, REG_BITS_16},
 	{0x4A04, 0x7010, REG_BITS_16},
@@ -5501,10 +6439,10 @@ const struct reg_entry dlt001_vendor_0_period_2_ES1[] = {
 	{0x02D7, 0x10, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_0_period_2_ES1 =
-    sizeof(dlt001_vendor_0_period_2_ES1);
+int32_t sizeof_seix006_vendor_0_period_2_ES1 =
+    sizeof(seix006_vendor_0_period_2_ES1);
 
-const struct reg_entry dlt001_vendor_0_period_2_ES2[] = {
+const struct reg_entry seix006_vendor_0_period_2_ES2[] = {
 	{0x0105, 0x80, REG_BITS_8},
 	{0x0387, 0x01, REG_BITS_8},
 	{0x4A24, 0x1300, REG_BITS_16},
@@ -5717,10 +6655,10 @@ const struct reg_entry dlt001_vendor_0_period_2_ES2[] = {
 	{0x0105, 0x40, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_0_period_2_ES2 =
-    sizeof(dlt001_vendor_0_period_2_ES2);
+int32_t sizeof_seix006_vendor_0_period_2_ES2 =
+    sizeof(seix006_vendor_0_period_2_ES2);
 
-const struct reg_entry dlt001_vendor_1_period_3_ES1[] = {
+const struct reg_entry seix006_vendor_1_period_3_ES1[] = {
 	{0x5800, 0x00, REG_BITS_8},
 	{0x5801, 0x00, REG_BITS_8},
 	{0x5802, 0x00, REG_BITS_8},
@@ -6484,6 +7422,10 @@ const struct reg_entry dlt001_vendor_1_period_3_ES1[] = {
 	{0x4C46, 0x2103, REG_BITS_16},
 	{0x4C48, 0x5F01, REG_BITS_16},
 	{0x4C4A, 0x5F01, REG_BITS_16},
+	{0x4C4C, 0xC604, REG_BITS_16},
+	{0x4C4E, 0x5D03, REG_BITS_16},
+	{0x4C50, 0xE600, REG_BITS_16},
+	{0x4C52, 0xE600, REG_BITS_16},
 	{0x4C54, 0x8A04, REG_BITS_16},
 	{0x4C56, 0x2103, REG_BITS_16},
 	{0x4C58, 0x5F01, REG_BITS_16},
@@ -6758,26 +7700,18 @@ const struct reg_entry dlt001_vendor_1_period_3_ES1[] = {
 	{0x5090, 0x40, REG_BITS_8},
 	{0x5091, 0x48, REG_BITS_8},
 	{0x0101, 0x00, REG_BITS_8},
-	{0x0102, 0x20, REG_BITS_8},
-	{0x0107, 0x10, REG_BITS_8},
 	{0x0108, 0x01, REG_BITS_8},
 	{0x0109, 0x4D, REG_BITS_8},
-	{0x010C, 0x20, REG_BITS_8},
 	{0x010D, 0x01, REG_BITS_8},
 	{0x010E, 0x4D, REG_BITS_8},
-	{0x0111, 0x10, REG_BITS_8},
 	{0x0112, 0x01, REG_BITS_8},
 	{0x0113, 0x4D, REG_BITS_8},
-	{0x0116, 0x20, REG_BITS_8},
 	{0x0117, 0x01, REG_BITS_8},
 	{0x0118, 0x4D, REG_BITS_8},
-	{0x011B, 0x20, REG_BITS_8},
 	{0x011C, 0x01, REG_BITS_8},
 	{0x011D, 0xCD, REG_BITS_8},
-	{0x0120, 0x20, REG_BITS_8},
 	{0x0121, 0x01, REG_BITS_8},
 	{0x0122, 0x4D, REG_BITS_8},
-	{0x0125, 0x20, REG_BITS_8},
 	{0x0126, 0x01, REG_BITS_8},
 	{0x0127, 0x03, REG_BITS_8},
 	{0x012A, 0x20, REG_BITS_8},
@@ -7073,10 +8007,10 @@ const struct reg_entry dlt001_vendor_1_period_3_ES1[] = {
 	{0x42BC, 0x0B, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_1_period_3_ES1 =
-    sizeof(dlt001_vendor_1_period_3_ES1);
+int32_t sizeof_seix006_vendor_1_period_3_ES1 =
+    sizeof(seix006_vendor_1_period_3_ES1);
 
-const struct reg_entry dlt001_vendor_1_period_3_ES2[] = {
+const struct reg_entry seix006_vendor_1_period_3_ES2[] = {
 	{0x5842, 0x07, REG_BITS_8},
 	{0x5843, 0x07, REG_BITS_8},
 	{0x5844, 0x07, REG_BITS_8},
@@ -7420,7 +8354,7 @@ const struct reg_entry dlt001_vendor_1_period_3_ES2[] = {
 	{0x481C, 0x00, REG_BITS_8},
 	{0x4826, 0x0500, REG_BITS_16},
 	{0x482C, 0x1E00, REG_BITS_16},
-	{0x4832, 0xF401, REG_BITS_16},
+	{0x4832, 0x2C01, REG_BITS_16},
 	{0x484F, 0x00, REG_BITS_8},
 	{0x4856, 0x14, REG_BITS_8},
 	{0x4884, 0x01, REG_BITS_8},
@@ -7448,7 +8382,7 @@ const struct reg_entry dlt001_vendor_1_period_3_ES2[] = {
 	{0x6E12, 0x3400, REG_BITS_16},
 	{0x6E8E, 0x9600, REG_BITS_16},
 	{0x6E90, 0xF401, REG_BITS_16},
-	{0x6E92, 0x8200, REG_BITS_16},
+	{0x6E92, 0x9600, REG_BITS_16},
 	{0x4C2C, 0x2E04, REG_BITS_16},
 	{0x4C2E, 0xC502, REG_BITS_16},
 	{0x4C30, 0x1702, REG_BITS_16},
@@ -7578,26 +8512,18 @@ const struct reg_entry dlt001_vendor_1_period_3_ES2[] = {
 	{0x508D, 0x56, REG_BITS_8},
 	{0x508F, 0x56, REG_BITS_8},
 	{0x5091, 0x48, REG_BITS_8},
-	{0x0102, 0x20, REG_BITS_8},
-	{0x0107, 0x10, REG_BITS_8},
 	{0x0108, 0x01, REG_BITS_8},
 	{0x0109, 0x4D, REG_BITS_8},
-	{0x010C, 0x20, REG_BITS_8},
 	{0x010D, 0x01, REG_BITS_8},
 	{0x010E, 0x41, REG_BITS_8},
-	{0x0111, 0x10, REG_BITS_8},
 	{0x0112, 0x01, REG_BITS_8},
 	{0x0113, 0x41, REG_BITS_8},
-	{0x0116, 0x20, REG_BITS_8},
 	{0x0117, 0x01, REG_BITS_8},
 	{0x0118, 0x01, REG_BITS_8},
-	{0x011B, 0x20, REG_BITS_8},
 	{0x011C, 0x01, REG_BITS_8},
 	{0x011D, 0xCD, REG_BITS_8},
-	{0x0120, 0x20, REG_BITS_8},
 	{0x0121, 0x01, REG_BITS_8},
 	{0x0122, 0x01, REG_BITS_8},
-	{0x0125, 0x20, REG_BITS_8},
 	{0x0126, 0x01, REG_BITS_8},
 	{0x0127, 0xC1, REG_BITS_8},
 	{0x012A, 0x20, REG_BITS_8},
@@ -7638,8 +8564,7 @@ const struct reg_entry dlt001_vendor_1_period_3_ES2[] = {
 	{0x01B2, 0x59, REG_BITS_8},
 	{0x01F9, 0x65, REG_BITS_8},
 	{0x01FC, 0x65, REG_BITS_8},
-	{0x0013, 0x03, REG_BITS_8},
-	{0x0014, 0x05, REG_BITS_8},
+	{0x0014, 0x0A, REG_BITS_8},
 	{0x001D, 0x1B, REG_BITS_8},
 	{0x02B8, 0x10, REG_BITS_8},
 	{0x02BA, 0x50, REG_BITS_8},
@@ -7654,10 +8579,10 @@ const struct reg_entry dlt001_vendor_1_period_3_ES2[] = {
 	{0x02C3, 0x10, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_1_period_3_ES2 =
-    sizeof(dlt001_vendor_1_period_3_ES2);
+int32_t sizeof_seix006_vendor_1_period_3_ES2 =
+    sizeof(seix006_vendor_1_period_3_ES2);
 
-const struct reg_entry dlt001_vendor_0_period_3_ES1[] = {
+const struct reg_entry seix006_vendor_0_period_3_ES1[] = {
 	{0x5800, 0x00, REG_BITS_8},
 	{0x5801, 0x00, REG_BITS_8},
 	{0x5802, 0x00, REG_BITS_8},
@@ -8268,6 +9193,10 @@ const struct reg_entry dlt001_vendor_0_period_3_ES1[] = {
 	{0x4C46, 0x2103, REG_BITS_16},
 	{0x4C48, 0x5F01, REG_BITS_16},
 	{0x4C4A, 0x5F01, REG_BITS_16},
+	{0x4C4C, 0xC604, REG_BITS_16},
+	{0x4C4E, 0x5D03, REG_BITS_16},
+	{0x4C50, 0xE600, REG_BITS_16},
+	{0x4C52, 0xE600, REG_BITS_16},
 	{0x4C54, 0x8A04, REG_BITS_16},
 	{0x4C56, 0x2103, REG_BITS_16},
 	{0x4C58, 0x5F01, REG_BITS_16},
@@ -8542,26 +9471,18 @@ const struct reg_entry dlt001_vendor_0_period_3_ES1[] = {
 	{0x5090, 0x40, REG_BITS_8},
 	{0x5091, 0x48, REG_BITS_8},
 	{0x0101, 0x00, REG_BITS_8},
-	{0x0102, 0x20, REG_BITS_8},
-	{0x0107, 0x10, REG_BITS_8},
 	{0x0108, 0x01, REG_BITS_8},
 	{0x0109, 0x4D, REG_BITS_8},
-	{0x010C, 0x20, REG_BITS_8},
 	{0x010D, 0x01, REG_BITS_8},
 	{0x010E, 0x4D, REG_BITS_8},
-	{0x0111, 0x10, REG_BITS_8},
 	{0x0112, 0x01, REG_BITS_8},
 	{0x0113, 0x4D, REG_BITS_8},
-	{0x0116, 0x20, REG_BITS_8},
 	{0x0117, 0x01, REG_BITS_8},
 	{0x0118, 0x4D, REG_BITS_8},
-	{0x011B, 0x20, REG_BITS_8},
 	{0x011C, 0x01, REG_BITS_8},
 	{0x011D, 0xCD, REG_BITS_8},
-	{0x0120, 0x20, REG_BITS_8},
 	{0x0121, 0x01, REG_BITS_8},
 	{0x0122, 0x4D, REG_BITS_8},
-	{0x0125, 0x20, REG_BITS_8},
 	{0x0126, 0x01, REG_BITS_8},
 	{0x0127, 0x03, REG_BITS_8},
 	{0x012A, 0x20, REG_BITS_8},
@@ -8857,10 +9778,10 @@ const struct reg_entry dlt001_vendor_0_period_3_ES1[] = {
 	{0x42BC, 0x0B, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_0_period_3_ES1 =
-    sizeof(dlt001_vendor_0_period_3_ES1);
+int32_t sizeof_seix006_vendor_0_period_3_ES1 =
+    sizeof(seix006_vendor_0_period_3_ES1);
 
-const struct reg_entry dlt001_vendor_0_period_3_ES2[] = {
+const struct reg_entry seix006_vendor_0_period_3_ES2[] = {
 	{0x5842, 0x07, REG_BITS_8},
 	{0x5843, 0x07, REG_BITS_8},
 	{0x5844, 0x07, REG_BITS_8},
@@ -9213,7 +10134,7 @@ const struct reg_entry dlt001_vendor_0_period_3_ES2[] = {
 	{0x481C, 0x00, REG_BITS_8},
 	{0x4826, 0x0500, REG_BITS_16},
 	{0x482C, 0x1E00, REG_BITS_16},
-	{0x4832, 0xF401, REG_BITS_16},
+	{0x4832, 0x2C01, REG_BITS_16},
 	{0x484F, 0x00, REG_BITS_8},
 	{0x4856, 0x14, REG_BITS_8},
 	{0x4884, 0x01, REG_BITS_8},
@@ -9241,7 +10162,7 @@ const struct reg_entry dlt001_vendor_0_period_3_ES2[] = {
 	{0x6E12, 0x3400, REG_BITS_16},
 	{0x6E8E, 0x9600, REG_BITS_16},
 	{0x6E90, 0xF401, REG_BITS_16},
-	{0x6E92, 0x8200, REG_BITS_16},
+	{0x6E92, 0x9600, REG_BITS_16},
 	{0x4C2C, 0x2E04, REG_BITS_16},
 	{0x4C2E, 0xC502, REG_BITS_16},
 	{0x4C30, 0x1702, REG_BITS_16},
@@ -9371,26 +10292,18 @@ const struct reg_entry dlt001_vendor_0_period_3_ES2[] = {
 	{0x508D, 0x56, REG_BITS_8},
 	{0x508F, 0x56, REG_BITS_8},
 	{0x5091, 0x48, REG_BITS_8},
-	{0x0102, 0x20, REG_BITS_8},
-	{0x0107, 0x10, REG_BITS_8},
 	{0x0108, 0x01, REG_BITS_8},
 	{0x0109, 0x4D, REG_BITS_8},
-	{0x010C, 0x20, REG_BITS_8},
 	{0x010D, 0x01, REG_BITS_8},
 	{0x010E, 0x41, REG_BITS_8},
-	{0x0111, 0x10, REG_BITS_8},
 	{0x0112, 0x01, REG_BITS_8},
 	{0x0113, 0x41, REG_BITS_8},
-	{0x0116, 0x20, REG_BITS_8},
 	{0x0117, 0x01, REG_BITS_8},
 	{0x0118, 0x01, REG_BITS_8},
-	{0x011B, 0x20, REG_BITS_8},
 	{0x011C, 0x01, REG_BITS_8},
 	{0x011D, 0xCD, REG_BITS_8},
-	{0x0120, 0x20, REG_BITS_8},
 	{0x0121, 0x01, REG_BITS_8},
 	{0x0122, 0x01, REG_BITS_8},
-	{0x0125, 0x20, REG_BITS_8},
 	{0x0126, 0x01, REG_BITS_8},
 	{0x0127, 0xC1, REG_BITS_8},
 	{0x012A, 0x20, REG_BITS_8},
@@ -9431,8 +10344,7 @@ const struct reg_entry dlt001_vendor_0_period_3_ES2[] = {
 	{0x01B2, 0x59, REG_BITS_8},
 	{0x01F9, 0x65, REG_BITS_8},
 	{0x01FC, 0x65, REG_BITS_8},
-	{0x0013, 0x03, REG_BITS_8},
-	{0x0014, 0x05, REG_BITS_8},
+	{0x0014, 0x0A, REG_BITS_8},
 	{0x001D, 0x1B, REG_BITS_8},
 	{0x02B8, 0x10, REG_BITS_8},
 	{0x02BA, 0x50, REG_BITS_8},
@@ -9447,10 +10359,10 @@ const struct reg_entry dlt001_vendor_0_period_3_ES2[] = {
 	{0x02C3, 0x10, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_0_period_3_ES2 =
-    sizeof(dlt001_vendor_0_period_3_ES2);
+int32_t sizeof_seix006_vendor_0_period_3_ES2 =
+    sizeof(seix006_vendor_0_period_3_ES2);
 
-const struct reg_entry dlt001_vendor_0_SHD_1_ES2[] = {
+const struct reg_entry seix006_vendor_0_SHD_1_ES2[] = {
 	{0x0068, 0x50, REG_BITS_8},
 	{0x9000, 0x8282, REG_BITS_16},
 	{0x9002, 0x01, REG_BITS_8},
@@ -10998,9 +11910,9 @@ const struct reg_entry dlt001_vendor_0_SHD_1_ES2[] = {
 	{0xA421, 0x0a, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_0_SHD_1_ES2 = sizeof(dlt001_vendor_0_SHD_1_ES2);
+int32_t sizeof_seix006_vendor_0_SHD_1_ES2 = sizeof(seix006_vendor_0_SHD_1_ES2);
 
-const struct reg_entry dlt001_vendor_0_SHD_2_ES2[] = {
+const struct reg_entry seix006_vendor_0_SHD_2_ES2[] = {
 	{0x0068, 0x50, REG_BITS_8},
 	{0x9000, 0x8282, REG_BITS_16},
 	{0x9002, 0x02, REG_BITS_8},
@@ -12548,9 +13460,9 @@ const struct reg_entry dlt001_vendor_0_SHD_2_ES2[] = {
 	{0xA421, 0x04, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_0_SHD_2_ES2 = sizeof(dlt001_vendor_0_SHD_2_ES2);
+int32_t sizeof_seix006_vendor_0_SHD_2_ES2 = sizeof(seix006_vendor_0_SHD_2_ES2);
 
-const struct reg_entry dlt001_vendor_0_SHD_3_ES2[] = {
+const struct reg_entry seix006_vendor_0_SHD_3_ES2[] = {
 	{0x0068, 0x50, REG_BITS_8},
 	{0x9000, 0x8282, REG_BITS_16},
 	{0x9002, 0x03, REG_BITS_8},
@@ -14098,9 +15010,9 @@ const struct reg_entry dlt001_vendor_0_SHD_3_ES2[] = {
 	{0xA421, 0x0a, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_0_SHD_3_ES2 = sizeof(dlt001_vendor_0_SHD_3_ES2);
+int32_t sizeof_seix006_vendor_0_SHD_3_ES2 = sizeof(seix006_vendor_0_SHD_3_ES2);
 
-const struct reg_entry dlt001_vendor_1_SHD_1_ES2[] = {
+const struct reg_entry seix006_vendor_1_SHD_1_ES2[] = {
 	{0x0068, 0x50, REG_BITS_8},
 	{0x9000, 0x8282, REG_BITS_16},
 	{0x9002, 0x01, REG_BITS_8},
@@ -15648,9 +16560,9 @@ const struct reg_entry dlt001_vendor_1_SHD_1_ES2[] = {
 	{0xA421, 0x0a, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_1_SHD_1_ES2 = sizeof(dlt001_vendor_1_SHD_1_ES2);
+int32_t sizeof_seix006_vendor_1_SHD_1_ES2 = sizeof(seix006_vendor_1_SHD_1_ES2);
 
-const struct reg_entry dlt001_vendor_1_SHD_2_ES2[] = {
+const struct reg_entry seix006_vendor_1_SHD_2_ES2[] = {
 	{0x0068, 0x50, REG_BITS_8},
 	{0x9000, 0x8282, REG_BITS_16},
 	{0x9002, 0x01, REG_BITS_8},
@@ -17198,9 +18110,9 @@ const struct reg_entry dlt001_vendor_1_SHD_2_ES2[] = {
 	{0xA421, 0x0a, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_1_SHD_2_ES2 = sizeof(dlt001_vendor_1_SHD_2_ES2);
+int32_t sizeof_seix006_vendor_1_SHD_2_ES2 = sizeof(seix006_vendor_1_SHD_2_ES2);
 
-const struct reg_entry dlt001_vendor_1_SHD_3_ES2[] = {
+const struct reg_entry seix006_vendor_1_SHD_3_ES2[] = {
 	{0x0068, 0x50, REG_BITS_8},
 	{0x9000, 0x8282, REG_BITS_16},
 	{0x9002, 0xfe, REG_BITS_8},
@@ -18748,7 +19660,7 @@ const struct reg_entry dlt001_vendor_1_SHD_3_ES2[] = {
 	{0xA421, 0x0a, REG_BITS_8},
 };
 
-int32_t sizeof_dlt001_vendor_1_SHD_3_ES2 = sizeof(dlt001_vendor_1_SHD_3_ES2);
+int32_t sizeof_seix006_vendor_1_SHD_3_ES2 = sizeof(seix006_vendor_1_SHD_3_ES2);
 
 const uint16_t AEO_table[] = {
 	0, 38, 74, 109, 143, 176, 209, 240, 270, 300,
@@ -18802,5 +19714,104 @@ const uint16_t AEO_table[] = {
 	2272, 2272, 2272, 2273, 2273, 2273, 2274, 2274, 2274, 2275,
 	2275, 2275, 2275, 2276, 2276, 2276, 2277, 2277, 2277, 2277
 };
+/****************************************************************
+ISO AUTO
+****************************************************************/
+const struct reg_entry seix006_iso_auto[] = {
+	{0x01E5, 0x00, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_iso_auto = sizeof(seix006_iso_auto);
+
+/****************************************************************
+MANUAL ISO 100
+****************************************************************/
+const struct reg_entry seix006_iso_100[] = {
+	{0x01E5, 0x07, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_iso_100 = sizeof(seix006_iso_100);
+/****************************************************************
+MANUAL ISO 200
+****************************************************************/
+const struct reg_entry seix006_iso_200[] = {
+	{0x01E5, 0x0A, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_iso_200 = sizeof(seix006_iso_200);
+
+/****************************************************************
+MANUAL ISO 400
+****************************************************************/
+const struct reg_entry seix006_iso_400[] = {
+	{0x01E5, 0x0D, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_iso_400 = sizeof(seix006_iso_400);
+
+/****************************************************************
+MANUAL ISO 800
+****************************************************************/
+const struct reg_entry seix006_iso_800[] = {
+	{0x01E5, 0x10, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_iso_800 = sizeof(seix006_iso_800);
+
+/****************************************************************
+MANUAL ISO 1600
+****************************************************************/
+const struct reg_entry seix006_iso_1600[] = {
+	{0x01E5, 0x13, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_iso_1600 = sizeof(seix006_iso_1600);
+
+/****************************************************************
+focus mode auto
+****************************************************************/
+const struct reg_entry seix006_focus_mode_auto[] = {
+	{0x002E, 0x02, REG_BITS_8},
+	{0x0012, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_focus_mode_auto = sizeof(seix006_focus_mode_auto);
+
+/****************************************************************
+focus mode continuous
+****************************************************************/
+const struct reg_entry seix006_focus_mode_continuous[] = {
+	{0x002E, 0x01, REG_BITS_8},
+	{0x0012, 0x01, REG_BITS_8},
+};
+
+int32_t sizeof_seix006_focus_mode_continuous =
+		sizeof(seix006_focus_mode_continuous);
+
+/****************************************************************
+primary focus window continuous
+****************************************************************/
+const struct reg_entry seix006_primary_focus_window_continuous[] = {
+	{0x4C4C, 0x2E04, REG_BITS_16},
+	{0x4C4E, 0xC502, REG_BITS_16},
+	{0x4C50, 0x1702, REG_BITS_16},
+	{0x4C52, 0x1702, REG_BITS_16},
+};
+
+int32_t sizeof_seix006_primary_focus_window_continuous =
+		sizeof(seix006_primary_focus_window_continuous);
+
+/****************************************************************
+primary focus window auto
+****************************************************************/
+const struct reg_entry seix006_primary_focus_window_auto[] = {
+	{0x4C4C, 0xC604, REG_BITS_16},
+	{0x4C4E, 0x5D03, REG_BITS_16},
+	{0x4C50, 0xE600, REG_BITS_16},
+	{0x4C52, 0xE600, REG_BITS_16},
+};
+
+int32_t sizeof_seix006_primary_focus_window_auto =
+		sizeof(seix006_primary_focus_window_auto);
 
 /**************** End of file ****************/

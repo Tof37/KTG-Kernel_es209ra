@@ -49,10 +49,16 @@ struct msm_camera_io_ext {
 	uint32_t csiirq;
 };
 
+struct msm_camera_io_clk {
+	uint32_t mclk_clk_rate;
+	uint32_t vfe_clk_rate;
+};
+
 struct msm_camera_device_platform_data {
 	void (*camera_gpio_on) (void);
 	void (*camera_gpio_off)(void);
 	struct msm_camera_io_ext ioext;
+	struct msm_camera_io_clk ioclk;
 };
 enum msm_camera_csi_data_format {
 	CSI_8BIT,
@@ -97,10 +103,17 @@ struct msm_camera_sensor_pwr {
 
 #define MSM_CAMERA_FLASH_SRC_PMIC (0x00000001<<0)
 #define MSM_CAMERA_FLASH_SRC_PWM  (0x00000001<<1)
+#ifdef CONFIG_MACH_SEMC_ZEUS
+#define MSM_CAMERA_FLASH_SRC_LED  (0x00000001<<2)
+#endif /* CONFIG_MACH_SEMC_ZEUS */
 
 struct msm_camera_sensor_flash_pmic {
+	uint8_t num_of_src;
 	uint32_t low_current;
 	uint32_t high_current;
+	enum pmic8058_leds led_src_1;
+	enum pmic8058_leds led_src_2;
+	int (*pmic_set_current)(enum pmic8058_leds id, unsigned mA);
 };
 
 struct msm_camera_sensor_flash_pwm {
@@ -117,6 +130,9 @@ struct msm_camera_sensor_flash_src {
 	union {
 		struct msm_camera_sensor_flash_pmic pmic_src;
 		struct msm_camera_sensor_flash_pwm pwm_src;
+#ifdef CONFIG_MACH_SEMC_ZEUS
+		struct gpio_led_platform_data *gpio_led_src;
+#endif /* CONFIG_MACH_SEMC_ZEUS */
 	} _fsrc;
 };
 
@@ -125,13 +141,23 @@ struct msm_camera_sensor_flash_data {
 	struct msm_camera_sensor_flash_src *flash_src;
 };
 
+struct msm_camera_sensor_strobe_flash_data {
+	int flash_charge; /* pin for charge */
+	uint32_t flash_recharge_duration;
+	uint32_t irq;
+	spinlock_t spin_lock;
+	spinlock_t timer_lock;
+};
+
 struct msm_camera_sensor_info {
 	const char *sensor_name;
 	int sensor_reset;
+	int sub_sensor_reset;
 	int sensor_pwd;
 	int vcm_pwd;
 	int vcm_enable;
 	int mclk;
+	int flash_type;
 	struct msm_camera_device_platform_data *pdata;
 	struct resource *resource;
 	uint8_t num_resources;
@@ -153,6 +179,7 @@ struct msm_camera_sensor_info {
 	struct msm_camera_sensor_pwr vcam_sd;
 	struct msm_camera_sensor_pwr vcam_af;
 	struct msm_camera_sensor_pwr vcam_sa;
+	struct msm_camera_sensor_strobe_flash_data *strobe_flash_data;
 #else
 	struct msm_camera_sensor_pwr vcam_io;
 	struct msm_camera_sensor_pwr vcam_sd;

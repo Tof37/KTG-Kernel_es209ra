@@ -749,11 +749,11 @@ void msm_camvfe_fn_init(struct msm_camvfe_fn *fptr, void *data)
 	vfe_syncdata = data;
 }
 
-void msm_camvpe_fn_init(struct msm_camvpe_fn *fptr, void *data)
+/*void msm_camvpe_fn_init(struct msm_camvpe_fn *fptr, void *data)
 {
 	fptr->vpe_reg		= NULL;
 	fptr->send_frame_to_vpe	= NULL;
 	fptr->vpe_config	= NULL;
 	fptr->vpe_cfg_update	= NULL;
 	fptr->dis		= NULL;
-}
+}*/

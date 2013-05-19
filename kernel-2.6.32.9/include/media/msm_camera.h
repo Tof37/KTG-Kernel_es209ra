@@ -244,6 +244,7 @@ struct msm_stats_event_ctrl {
 	struct msm_ctrl_cmd ctrl_cmd;
 	/* struct  vfe_event_t  stats_event; */
 	struct msm_vfe_evt_msg stats_event;
+	struct msm_sensor_resp_t sensor_msg;
 };
 
 /* 2. config command: config command(from config thread); */
